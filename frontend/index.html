@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>小阳的大学属性面板</title>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <link href="https://unpkg.com/nes.css/css/nes.min.css" rel="stylesheet" />
+    <style>
+        body { padding: 20px; font-family: 'Press Start 2P', 'SimHei', sans-serif; background-color: #212529; color: white;}
+        .container { max-width: 600px; margin: 0 auto; }
+        .nes-container { background-color: white; color: black; margin-bottom: 20px;}
+        .delta-text { font-size: 0.8em; margin-left: 10px; font-weight: bold; }
+        .positive { color: #92cc41; }
+        .negative { color: #e76e55; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 style="text-align: center;">⚡ 小阳状态面板 ⚡</h2>
+        
+        <div class="nes-container with-title is-rounded">
+            <p class="title">当前属性</p>
+            <div>体力: <progress class="nes-progress is-success" value="80" max="100" id="stamina"></progress><span id="stamina-delta" class="delta-text"></span></div>
+            <br>
+            <div>智力: <progress class="nes-progress is-primary" value="40" max="100" id="intelligence"></progress><span id="intelligence-delta" class="delta-text"></span></div>
+            <br>
+            <div>心情: <progress class="nes-progress is-warning" value="20" max="100" id="mood"></progress><span id="mood-delta" class="delta-text"></span></div>
+        </div>
+
+        <div class="nes-container with-title is-rounded">
+            <p class="title">今日行动日志</p>
+            <div class="nes-field">
+                <textarea id="daily-input" class="nes-textarea" placeholder="例如：今天跑了 3 公里，在图书馆看了一下午微积分，晚上和室友吵架了。"></textarea>
+            </div>
+            <br>
+            <button type="button" class="nes-btn is-primary" id="submit-btn" onclick="submitDiary()">AI 结算今日属性</button>
+        </div>
+        
+        <div class="nes-container is-rounded is-dark" id="summary-box" style="display: none;">
+            <p id="summary-text"></p>
+        </div>
+
+        <dialog class="nes-dialog is-dark" id="npc-dialog">
+            <form method="dialog">
+                <p class="title" style="color:#e76e55;">⚠️ 警告：NPC 乱入！</p>
+                <p id="npc-message">你的状态太低了！</p>
+                <menu class="dialog-menu">
+                    <button type="button" class="nes-btn is-primary" onclick="document.getElementById('npc-dialog').close()">知道错了，马上休息</button>
+                </menu>
+            </form>
+        </dialog>
+    </div>
+
+    <script>
+        // 前端核心交互逻辑
+        async function submitDiary() {
+            const input = document.getElementById('daily-input').value;
+            if(!input) {
+                alert("同学，你今天总不能什么都没干吧？写点什么！");
+                return;
+            }
+
+            const btn = document.getElementById('submit-btn');
+            btn.innerText = "大模型沉思中...";
+            btn.classList.add('is-disabled');
+            btn.disabled = true;
+
+            try {
+                // 1. 发送请求给你的本地后端
+                const response = await fetch('http://127.0.0.1:8000/api/settle', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({text: input})
+                });
+                
+                const data = await response.json();
+
+                // 2. 更新进度条并显示增减数字
+                updateAttribute('stamina', data.stamina_delta);
+                updateAttribute('intelligence', data.intelligence_delta);
+                updateAttribute('mood', data.mood_delta);
+
+                // 3. 显示 AI 旁白
+                document.getElementById('summary-box').style.display = 'block';
+                document.getElementById('summary-text').innerText = "旁白：" + data.summary;
+
+                // 4. 触发 NPC 剧情逻辑 (心情低于 30 触发)
+                const currentMood = parseInt(document.getElementById('mood').value);
+                if (currentMood < 30) {
+                    setTimeout(() => {
+                        document.getElementById('npc-message').innerText = "辅导员小陌：你看看你的心情值！检测到持续摆烂或内卷，请立刻放下手机去吃顿好的，否则明天将被挂科诅咒！";
+                        document.getElementById('npc-dialog').showModal();
+                    }, 500); // 延迟半秒弹出，体验更好
+                }
+
+            } catch (error) {
+                console.error(error);
+                alert("请求失败！请检查终端里的 Python 后端是不是报错了，或者 API Key 填错了。");
+            } finally {
+                btn.innerText = "AI 结算今日属性";
+                btn.classList.remove('is-disabled');
+                btn.disabled = false;
+            }
+        }
+
+        // 更新属性的辅助函数
+        function updateAttribute(id, delta) {
+            let bar = document.getElementById(id);
+            let deltaSpan = document.getElementById(id + '-delta');
+            
+            // 计算新值 (限制在 0-100 之间)
+            let newVal = parseInt(bar.value) + delta;
+            newVal = Math.max(0, Math.min(100, newVal));
+            bar.value = newVal;
+
+            // 显示 +3 或 -2 这样的文字
+            if (delta > 0) {
+                deltaSpan.innerText = "+" + delta;
+                deltaSpan.className = "delta-text positive";
+            } else if (delta < 0) {
+                deltaSpan.innerText = delta;
+                deltaSpan.className = "delta-text negative";
+            } else {
+                deltaSpan.innerText = "+0";
+                deltaSpan.className = "delta-text";
+            }
+        }
+    </script>
+</body>
+</html>
