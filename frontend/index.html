@@ -4,133 +4,322 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>小阳的大学属性面板</title>
-    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
-    <link href="https://unpkg.com/nes.css/css/nes.min.css" rel="stylesheet" />
     <style>
-        /* 1. 打造赛博朋克暗黑背景，并加入酷炫的霓虹网格感 */
-        body { 
-            padding: 40px 20px; 
-            background-color: #1a1a24; 
-            color: #fff;
-            background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 4px, 6px 100%;
+        /* ==================== 1. 全局与背景设计 ==================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
-        
-        /* 2. 强制所有中文字体变成好看的像素块风格 */
-        * { font-family: 'Press Start 2P', 'MS Gothic', 'SimHei', sans-serif; } 
-        
-        /* 3. 限制主容器宽度，并加上高逼格的微光阴影 */
-        .container { 
-            max-width: 650px; 
-            margin: 0 auto; 
-            background: #222230;
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            /* ⚠️ 核心：这里替换成你挑选的精美图片！可以是本地相对路径（如 "bg.jpg"）或网络图片URL */
+            background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1964&auto=format&fit=crop') no-repeat center center;
+            background-size: cover;
+            position: relative;
+        }
+
+        /* 背景轻微暗化遮罩，突显卡片 */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.25);
+            z-index: 0;
+        }
+
+        /* ==================== 2. 毛玻璃核心大画板 ==================== */
+        .main-board {
+            position: relative;
+            z-index: 1;
+            width: 90%;
+            max-width: 1100px;
+            height: 80vh;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 24px;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
             padding: 30px;
-            border: 4px solid #00f0ff;
-            box-shadow: 0 0 20px #00f0ff, inset 0 0 10px #00f0ff;
+            color: #ffffff;
         }
 
-        /* 4. 美化 NES 的白底框，变成半透明黑底，瞬间高大上 */
-        .nes-container.is-custom {
-            background-color: rgba(20, 20, 30, 0.85) !important;
-            color: #fff !important;
-            border-image-source: url('data:image/svg+xml;utf8,<svg version="1.1" width="5" height="5" xmlns="http://www.w3.org/2000/svg"><path d="M2 1 h1 v1 h-1 z M1 2 h3 v1 h-3 z M2 3 h1 v1 h-1 z" fill="%23ff007f" /></svg>') !important; /* 霓虹粉边框 */
-            box-shadow: 0 0 10px rgba(255, 0, 127, 0.3);
+        /* 网站大标题 */
+        .board-title {
+            text-align: center;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #ffffff, #ffd1f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 25px;
-        }
-        
-        .nes-container.is-custom .title {
-            background-color: #ff007f !important;
-            color: white !important;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
-        /* 5. 进度条文字微调 */
-        .bar-label {
+        /* 左右双栏布局（完美复刻参考图） */
+        .content-layout {
+            flex: 1;
+            display: flex;
+            gap: 30px;
+            overflow: hidden;
+        }
+
+        /* 左栏：输入区域 */
+        .column-left {
+            flex: 1.1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* 右栏：状态与旁白展示区域 */
+        .column-right {
+            flex: 0.9;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ==================== 3. 内部玻璃微型卡片 ==================== */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.05);
+        }
+
+        .card-subtitle {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 18px;
+            color: #fff;
+            border-left: 4px solid #ff6ebb;
+            padding-left: 10px;
+        }
+
+        /* 输入框样式 */
+        .custom-textarea {
+            width: 100%;
+            height: 140px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            color: #fff;
+            font-size: 15px;
+            resize: none;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .custom-textarea:focus {
+            background: rgba(255, 255, 255, 0.22);
+            border-color: #ff6ebb;
+            box-shadow: 0 0 15px rgba(255, 110, 187, 0.4);
+        }
+
+        /* 渐变双色按钮组（复刻清空与提交） */
+        .btn-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .action-btn {
+            flex: 1;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-clear {
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-clear:hover { background: rgba(255,255,255,0.25); }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #ff6ebb, #3a86ff);
+            box-shadow: 0 4px 15px rgba(255, 110, 187, 0.4);
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 110, 187, 0.6);
+        }
+
+        /* ==================== 4. 高阶科技感状态条 ==================== */
+        .status-item {
+            margin-bottom: 20px;
+        }
+
+        .status-info {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
             font-size: 14px;
-            color: #00f0ff;
+            margin-bottom: 6px;
         }
 
-        .delta-text { font-size: 0.9em; font-weight: bold; }
-        .positive { color: #39ff14; text-shadow: 0 0 5px #39ff14; } /* 荧光绿 */
-        .negative { color: #ff3131; text-shadow: 0 0 5px #ff3131; } /* 荧光红 */
-
-        /* 6. 输入框美化 */
-        .nes-textarea {
-            background-color: #14141e !important;
-            color: #00f0ff !important;
-            border-color: #00f0ff !important;
+        /* 替代原生组件，用漂亮的Div制作属性条 */
+        .progress-track {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
         }
-        .nes-textarea::placeholder { color: #555577; }
 
-        /* 7. 按钮加上霓虹呼吸特效 */
-        .nes-btn.is-cyber {
-            background-color: #00f0ff !important;
-            color: #000 !important;
+        .progress-fill {
+            height: 100%;
+            width: 50%; /* 初始值 */
+            border-radius: 6px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 针对不同属性配置精美渐变色 */
+        #stamina-fill { background: linear-gradient(90deg, #10b981, #34d399); }
+        #intelligence-fill { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+        #mood-fill { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+
+        .delta-badge {
             font-weight: bold;
-            box-shadow: 0 0 15px #00f0ff;
-            transition: all 0.2s;
+            font-size: 13px;
         }
-        .nes-btn.is-cyber:hover {
-            background-color: #ff007f !important;
-            color: #fff !important;
-            box-shadow: 0 0 25px #ff007f;
+        .pos { color: #34d399; }
+        .neg { color: #f87171; }
+
+        /* AI 旁白区样式 */
+        .summary-content {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #e2e8f0;
+            font-style: italic;
+        }
+
+        /* ==================== 5. 极致质感 NPC 弹窗 ==================== */
+        .glass-dialog {
+            border: none;
+            background: rgba(25, 20, 30, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(248, 113, 113, 0.4);
+            border-radius: 20px;
+            padding: 30px;
+            width: 450px;
+            color: white;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(248, 113, 113, 0.15);
+            margin: auto;
+        }
+
+        .glass-dialog::backdrop {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+        }
+
+        .dialog-title {
+            color: #f87171;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dialog-btn {
+            background: linear-gradient(135deg, #f87171, #ef4444);
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            float: right;
+            margin-top: 15px;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 style="text-align: center; color: #00f0ff; text-shadow: 0 0 10px #00f0ff; margin-bottom: 30px; font-size: 24px;">
-            ⚡ 小阳の大学属性面板 ⚡
-        </h1>
-        
-        <div class="nes-container with-title is-rounded is-custom">
-            <p class="title">REAL-TIME STATUS</p>
-            
-            <div>
-                <div class="bar-label"><span>🔋 体力 (Stamina)</span><span id="stamina-delta" class="delta-text"></span></div>
-                <progress class="nes-progress is-success" value="80" max="100" id="stamina"></progress>
-            </div>
-            <br>
-            <div>
-                <div class="bar-label"><span>🧠 智力 (Intelligence)</span><span id="intelligence-delta" class="delta-text"></span></div>
-                <progress class="nes-progress is-primary" value="40" max="100" id="intelligence"></progress>
-            </div>
-            <br>
-            <div>
-                <div class="bar-label"><span>🔮 心情 (Mood)</span><span id="mood-delta" class="delta-text"></span></div>
-                <progress class="nes-progress is-warning" value="20" max="100" id="mood"></progress>
-            </div>
-        </div>
 
-        <div class="nes-container with-title is-rounded is-custom">
-            <p class="title">ACTION LOG</p>
-            <div class="nes-field">
-                <textarea id="daily-input" class="nes-textarea" rows="3" placeholder="输入你今天干了什么... 例如：熬夜刷微积分到凌晨3点。"></textarea>
-            </div>
-            <br>
-            <button type="button" class="nes-btn is-cyber" style="width: 100%;" id="submit-btn" onclick="submitDiary()">AI 结算今日属性</button>
-        </div>
+    <div class="main-board">
+        <h1 class="board-title">✨ 大学生生涯状态模拟舱 ✨</h1>
         
-        <div class="nes-container is-rounded is-dark" id="summary-box" style="display: none; border-color: #39ff14; box-shadow: 0 0 10px rgba(57,255,20,0.3);">
-            <p id="summary-text" style="color: #39ff14; margin: 0; font-size: 14px;"></p>
-        </div>
+        <div class="content-layout">
+            <div class="column-left">
+                <div class="glass-card" style="flex: 1;">
+                    <p class="card-subtitle">今日行动日志</p>
+                    <textarea id="daily-input" class="custom-textarea" placeholder="在这里写下你今天的经历...例如：今天清晨在操场晨跑了3公里，感觉神清气爽！"></textarea>
+                    <div class="btn-group" style="margin-top: 20px;">
+                        <button class="action-btn btn-clear" onclick="document.getElementById('daily-input').value=''">清空输入</button>
+                        <button class="action-btn btn-submit" id="submit-btn" onclick="submitDiary()">AI 结算今日属性</button>
+                    </div>
+                </div>
+            </div>
 
-        <dialog class="nes-dialog is-dark" id="npc-dialog" style="border: 4px solid #ff3131; box-shadow: 0 0 20px #ff3131;">
-            <form method="dialog">
-                <p class="title" style="color:#ff3131; font-weight: bold; font-size: 18px;">⚠️ 警告：NPC 乱入！</p>
-                <p id="npc-message" style="font-size: 14px; line-height: 1.6;"></p>
-                <br>
-                <menu class="dialog-menu" style="text-align: right; padding: 0;">
-                    <button type="button" class="nes-btn is-error" onclick="document.getElementById('npc-dialog').close()">知道错了，马上休息</button>
-                </menu>
-            </form>
-        </dialog>
+            <div class="column-right">
+                <div class="glass-card">
+                    <p class="card-subtitle">当前角色状态面板</p>
+                    
+                    <div class="status-item">
+                        <div class="status-info"><span>🔋 体力 (Stamina)</span><span id="stamina-delta" class="delta-badge"></span></div>
+                        <div class="progress-track"><div class="progress-fill" id="stamina-fill"></div></div>
+                    </div>
+
+                    <div class="status-item">
+                        <div class="status-info"><span>🧠 智力 (Intelligence)</span><span id="intelligence-delta" class="delta-badge"></span></div>
+                        <div class="progress-track"><div class="progress-fill" id="intelligence-fill"></div></div>
+                    </div>
+
+                    <div class="status-item">
+                        <div class="status-info"><span>🔮 心情 (Mood)</span><span id="mood-delta" class="delta-badge"></span></div>
+                        <div class="progress-track"><div class="progress-fill" id="mood-fill"></div></div>
+                    </div>
+                </div>
+
+                <div class="glass-card" id="summary-box" style="flex: 1; display: none;">
+                    <p class="card-subtitle">观测者旁白</p>
+                    <p class="summary-content" id="summary-text"></p>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <dialog class="glass-dialog" id="npc-dialog">
+        <div class="dialog-title">⚠️ 警告：NPC 乱入！</div>
+        <p id="npc-message" style="line-height: 1.6; color: #cbd5e1;"></p>
+        <button class="dialog-btn" onclick="document.getElementById('npc-dialog').close()">知道错了，马上休息</button>
+    </dialog>
+
     <script>
+        // 定义全局状态对象，方便管理和限制极值
+        let userStats = {
+            stamina: 70,
+            intelligence: 50,
+            mood: 60
+        };
+
+        // 页面首次加载时渲染初始条形图
+        window.onload = () => {
+            renderBars();
+        };
+
         async function submitDiary() {
             const input = document.getElementById('daily-input').value;
             if(!input) {
@@ -143,7 +332,7 @@
             btn.disabled = true;
 
             try {
-                // ⚠️ 自动读取你部署在 Render 上的公网大脑
+                // 精准请求你的云端大脑
                 const response = await fetch('https://xiaomo-persona-1.onrender.com/api/settle', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -152,47 +341,58 @@
                 
                 const data = await response.json();
 
-                updateAttribute('stamina', data.stamina_delta);
-                updateAttribute('intelligence', data.intelligence_delta);
-                updateAttribute('mood', data.mood_delta);
+                // 更新本地数据并处理数值变化动画
+                updateStat('stamina', data.stamina_delta);
+                updateStat('intelligence', data.intelligence_delta);
+                updateStat('mood', data.mood_delta);
 
+                // 展示旁白总结
                 document.getElementById('summary-box').style.display = 'block';
-                document.getElementById('summary-text').innerText = "🤖 旁白：" + data.summary;
+                document.getElementById('summary-text').innerText = "“ " + data.summary + " ”";
 
-                const currentMood = parseInt(document.getElementById('mood').value);
-                if (currentMood < 30) {
+                // 检查触发 NPC
+                if (userStats.mood < 30) {
                     setTimeout(() => {
                         document.getElementById('npc-message').innerText = "辅导员小阳：你看看你的心情值！检测到持续摆烂或内卷，请立刻放下手机去吃顿好的，否则明天将被挂科诅咒！";
                         document.getElementById('npc-dialog').showModal();
-                    }, 500);
+                    }, 600);
                 }
 
             } catch (error) {
                 console.error(error);
-                alert("请求失败！请检查 Render 后端服务器是否正常。");
+                alert("请求失败！请检查 Render 云端服务器状态。");
             } finally {
                 btn.innerText = "AI 结算今日属性";
                 btn.disabled = false;
             }
         }
 
-        function updateAttribute(id, delta) {
-            let bar = document.getElementById(id);
-            let deltaSpan = document.getElementById(id + '-delta');
-            let newVal = parseInt(bar.value) + delta;
-            newVal = Math.max(0, Math.min(100, newVal));
-            bar.value = newVal;
+        // 逻辑更新与数学钳制（0~100）
+        function updateStat(key, delta) {
+            userStats[key] += delta;
+            userStats[key] = Math.max(0, Math.min(100, userStats[key]));
 
+            // 渲染增减标签
+            let deltaSpan = document.getElementById(key + '-delta');
             if (delta > 0) {
                 deltaSpan.innerText = "+" + delta;
-                deltaSpan.className = "delta-text positive";
+                deltaSpan.className = "delta-badge pos";
             } else if (delta < 0) {
                 deltaSpan.innerText = delta;
-                deltaSpan.className = "delta-text negative";
+                deltaSpan.className = "delta-badge neg";
             } else {
                 deltaSpan.innerText = "+0";
-                deltaSpan.className = "delta-text";
+                deltaSpan.className = "delta-badge";
             }
+
+            renderBars();
+        }
+
+        // 重新渲染条形宽度动画
+        function renderBars() {
+            document.getElementById('stamina-fill').style.width = userStats.stamina + '%';
+            document.getElementById('intelligence-fill').style.width = userStats.intelligence + '%';
+            document.getElementById('mood-fill').style.width = userStats.mood + '%';
         }
     </script>
 </body>
