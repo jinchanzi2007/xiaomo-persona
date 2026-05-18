@@ -2,57 +2,135 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>小阳的大学属性面板</title>
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <link href="https://unpkg.com/nes.css/css/nes.min.css" rel="stylesheet" />
     <style>
-        body { padding: 20px; font-family: 'Press Start 2P', 'SimHei', sans-serif; background-color: #212529; color: white;}
-        .container { max-width: 600px; margin: 0 auto; }
-        .nes-container { background-color: white; color: black; margin-bottom: 20px;}
-        .delta-text { font-size: 0.8em; margin-left: 10px; font-weight: bold; }
-        .positive { color: #92cc41; }
-        .negative { color: #e76e55; }
+        /* 1. 打造赛博朋克暗黑背景，并加入酷炫的霓虹网格感 */
+        body { 
+            padding: 40px 20px; 
+            background-color: #1a1a24; 
+            color: #fff;
+            background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%;
+        }
+        
+        /* 2. 强制所有中文字体变成好看的像素块风格 */
+        * { font-family: 'Press Start 2P', 'MS Gothic', 'SimHei', sans-serif; } 
+        
+        /* 3. 限制主容器宽度，并加上高逼格的微光阴影 */
+        .container { 
+            max-width: 650px; 
+            margin: 0 auto; 
+            background: #222230;
+            padding: 30px;
+            border: 4px solid #00f0ff;
+            box-shadow: 0 0 20px #00f0ff, inset 0 0 10px #00f0ff;
+        }
+
+        /* 4. 美化 NES 的白底框，变成半透明黑底，瞬间高大上 */
+        .nes-container.is-custom {
+            background-color: rgba(20, 20, 30, 0.85) !important;
+            color: #fff !important;
+            border-image-source: url('data:image/svg+xml;utf8,<svg version="1.1" width="5" height="5" xmlns="http://www.w3.org/2000/svg"><path d="M2 1 h1 v1 h-1 z M1 2 h3 v1 h-3 z M2 3 h1 v1 h-1 z" fill="%23ff007f" /></svg>') !important; /* 霓虹粉边框 */
+            box-shadow: 0 0 10px rgba(255, 0, 127, 0.3);
+            margin-bottom: 25px;
+        }
+        
+        .nes-container.is-custom .title {
+            background-color: #ff007f !important;
+            color: white !important;
+        }
+
+        /* 5. 进度条文字微调 */
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #00f0ff;
+        }
+
+        .delta-text { font-size: 0.9em; font-weight: bold; }
+        .positive { color: #39ff14; text-shadow: 0 0 5px #39ff14; } /* 荧光绿 */
+        .negative { color: #ff3131; text-shadow: 0 0 5px #ff3131; } /* 荧光红 */
+
+        /* 6. 输入框美化 */
+        .nes-textarea {
+            background-color: #14141e !important;
+            color: #00f0ff !important;
+            border-color: #00f0ff !important;
+        }
+        .nes-textarea::placeholder { color: #555577; }
+
+        /* 7. 按钮加上霓虹呼吸特效 */
+        .nes-btn.is-cyber {
+            background-color: #00f0ff !important;
+            color: #000 !important;
+            font-weight: bold;
+            box-shadow: 0 0 15px #00f0ff;
+            transition: all 0.2s;
+        }
+        .nes-btn.is-cyber:hover {
+            background-color: #ff007f !important;
+            color: #fff !important;
+            box-shadow: 0 0 25px #ff007f;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2 style="text-align: center;">⚡ 小阳状态面板 ⚡</h2>
+        <h1 style="text-align: center; color: #00f0ff; text-shadow: 0 0 10px #00f0ff; margin-bottom: 30px; font-size: 24px;">
+            ⚡ 小阳の大学属性面板 ⚡
+        </h1>
         
-        <div class="nes-container with-title is-rounded">
-            <p class="title">当前属性</p>
-            <div>体力: <progress class="nes-progress is-success" value="80" max="100" id="stamina"></progress><span id="stamina-delta" class="delta-text"></span></div>
-            <br>
-            <div>智力: <progress class="nes-progress is-primary" value="40" max="100" id="intelligence"></progress><span id="intelligence-delta" class="delta-text"></span></div>
-            <br>
-            <div>心情: <progress class="nes-progress is-warning" value="20" max="100" id="mood"></progress><span id="mood-delta" class="delta-text"></span></div>
-        </div>
-
-        <div class="nes-container with-title is-rounded">
-            <p class="title">今日行动日志</p>
-            <div class="nes-field">
-                <textarea id="daily-input" class="nes-textarea" placeholder="例如：今天跑了 3 公里，在图书馆看了一下午微积分，晚上和室友吵架了。"></textarea>
+        <div class="nes-container with-title is-rounded is-custom">
+            <p class="title">REAL-TIME STATUS</p>
+            
+            <div>
+                <div class="bar-label"><span>🔋 体力 (Stamina)</span><span id="stamina-delta" class="delta-text"></span></div>
+                <progress class="nes-progress is-success" value="80" max="100" id="stamina"></progress>
             </div>
             <br>
-            <button type="button" class="nes-btn is-primary" id="submit-btn" onclick="submitDiary()">AI 结算今日属性</button>
-        </div>
-        
-        <div class="nes-container is-rounded is-dark" id="summary-box" style="display: none;">
-            <p id="summary-text"></p>
+            <div>
+                <div class="bar-label"><span>🧠 智力 (Intelligence)</span><span id="intelligence-delta" class="delta-text"></span></div>
+                <progress class="nes-progress is-primary" value="40" max="100" id="intelligence"></progress>
+            </div>
+            <br>
+            <div>
+                <div class="bar-label"><span>🔮 心情 (Mood)</span><span id="mood-delta" class="delta-text"></span></div>
+                <progress class="nes-progress is-warning" value="20" max="100" id="mood"></progress>
+            </div>
         </div>
 
-        <dialog class="nes-dialog is-dark" id="npc-dialog">
+        <div class="nes-container with-title is-rounded is-custom">
+            <p class="title">ACTION LOG</p>
+            <div class="nes-field">
+                <textarea id="daily-input" class="nes-textarea" rows="3" placeholder="输入你今天干了什么... 例如：熬夜刷微积分到凌晨3点。"></textarea>
+            </div>
+            <br>
+            <button type="button" class="nes-btn is-cyber" style="width: 100%;" id="submit-btn" onclick="submitDiary()">AI 结算今日属性</button>
+        </div>
+        
+        <div class="nes-container is-rounded is-dark" id="summary-box" style="display: none; border-color: #39ff14; box-shadow: 0 0 10px rgba(57,255,20,0.3);">
+            <p id="summary-text" style="color: #39ff14; margin: 0; font-size: 14px;"></p>
+        </div>
+
+        <dialog class="nes-dialog is-dark" id="npc-dialog" style="border: 4px solid #ff3131; box-shadow: 0 0 20px #ff3131;">
             <form method="dialog">
-                <p class="title" style="color:#e76e55;">⚠️ 警告：NPC 乱入！</p>
-                <p id="npc-message">你的状态太低了！</p>
-                <menu class="dialog-menu">
-                    <button type="button" class="nes-btn is-primary" onclick="document.getElementById('npc-dialog').close()">知道错了，马上休息</button>
+                <p class="title" style="color:#ff3131; font-weight: bold; font-size: 18px;">⚠️ 警告：NPC 乱入！</p>
+                <p id="npc-message" style="font-size: 14px; line-height: 1.6;"></p>
+                <br>
+                <menu class="dialog-menu" style="text-align: right; padding: 0;">
+                    <button type="button" class="nes-btn is-error" onclick="document.getElementById('npc-dialog').close()">知道错了，马上休息</button>
                 </menu>
             </form>
         </dialog>
     </div>
 
     <script>
-        // 前端核心交互逻辑
         async function submitDiary() {
             const input = document.getElementById('daily-input').value;
             if(!input) {
@@ -62,12 +140,11 @@
 
             const btn = document.getElementById('submit-btn');
             btn.innerText = "大模型沉思中...";
-            btn.classList.add('is-disabled');
             btn.disabled = true;
 
             try {
-                // 1. 发送请求给你的本地后端
-                const response = await fetch('https://xiaomo-persona.onrender.com/api/settle', {
+                // ⚠️ 自动读取你部署在 Render 上的公网大脑
+                const response = await fetch('https://xiaomo-persona-1.onrender.com/api/settle', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({text: input})
@@ -75,45 +152,37 @@
                 
                 const data = await response.json();
 
-                // 2. 更新进度条并显示增减数字
                 updateAttribute('stamina', data.stamina_delta);
                 updateAttribute('intelligence', data.intelligence_delta);
                 updateAttribute('mood', data.mood_delta);
 
-                // 3. 显示 AI 旁白
                 document.getElementById('summary-box').style.display = 'block';
-                document.getElementById('summary-text').innerText = "旁白：" + data.summary;
+                document.getElementById('summary-text').innerText = "🤖 旁白：" + data.summary;
 
-                // 4. 触发 NPC 剧情逻辑 (心情低于 30 触发)
                 const currentMood = parseInt(document.getElementById('mood').value);
                 if (currentMood < 30) {
                     setTimeout(() => {
-                        document.getElementById('npc-message').innerText = "辅导员小陌：你看看你的心情值！检测到持续摆烂或内卷，请立刻放下手机去吃顿好的，否则明天将被挂科诅咒！";
+                        document.getElementById('npc-message').innerText = "辅导员小阳：你看看你的心情值！检测到持续摆烂或内卷，请立刻放下手机去吃顿好的，否则明天将被挂科诅咒！";
                         document.getElementById('npc-dialog').showModal();
-                    }, 500); // 延迟半秒弹出，体验更好
+                    }, 500);
                 }
 
             } catch (error) {
                 console.error(error);
-                alert("请求失败！请检查终端里的 Python 后端是不是报错了，或者 API Key 填错了。");
+                alert("请求失败！请检查 Render 后端服务器是否正常。");
             } finally {
                 btn.innerText = "AI 结算今日属性";
-                btn.classList.remove('is-disabled');
                 btn.disabled = false;
             }
         }
 
-        // 更新属性的辅助函数
         function updateAttribute(id, delta) {
             let bar = document.getElementById(id);
             let deltaSpan = document.getElementById(id + '-delta');
-            
-            // 计算新值 (限制在 0-100 之间)
             let newVal = parseInt(bar.value) + delta;
             newVal = Math.max(0, Math.min(100, newVal));
             bar.value = newVal;
 
-            // 显示 +3 或 -2 这样的文字
             if (delta > 0) {
                 deltaSpan.innerText = "+" + delta;
                 deltaSpan.className = "delta-text positive";
