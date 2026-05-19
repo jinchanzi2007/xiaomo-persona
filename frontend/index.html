@@ -17,12 +17,55 @@
         /* ==================== 2. 毛玻璃核心大画板 ==================== */
         .main-board { position: relative; z-index: 1; width: 90%; max-width: 1150px; height: 85vh; background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 24px; box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; padding: 30px; color: #ffffff; }
         .board-title { text-align: center; font-size: 26px; font-weight: 700; letter-spacing: 2px; background: linear-gradient(135deg, #ffffff, #ffd1f0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 25px; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .content-layout { flex: 1; display: flex; gap: 30px; overflow: hidden; }
+        
+        /* ==================== 🌟 新增：游戏多菜单专用样式 ==================== */
+        .game-menu {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 12px;
+            flex-shrink: 0;
+        }
+        .menu-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .menu-btn:hover, .menu-btn.active {
+            background: linear-gradient(135deg, #ff6ebb, #a29bfe);
+            border-color: transparent;
+            box-shadow: 0 0 10px rgba(255, 110, 187, 0.5);
+            transform: translateY(-1px);
+        }
+        .game-page {
+            display: none;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .game-page.active {
+            display: flex;
+        }
+        .archive-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; }
+        .map-list { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+        .map-item { 
+            background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; 
+            border: 1px solid rgba(255,255,255,0.15); cursor: pointer; transition: 0.3s;
+        }
+        .map-item:hover { background: rgba(255, 110, 187, 0.2); border-color: #ff6ebb; }
+
+        /* ==================== 3. 内部玻璃卡片与输入区 ==================== */
+        .content-layout { flex: 1; display: flex; gap: 30px; overflow: hidden; width: 100%; height: 100%; }
         .column-left { flex: 1.1; display: flex; flex-direction: column; gap: 20px; overflow: hidden; }
         .column-right { flex: 0.9; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; padding-right: 5px; }
         .column-right::-webkit-scrollbar { width: 0px; }
-
-        /* ==================== 3. 内部玻璃卡片与输入区 ==================== */
         .glass-card { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 24px; box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.05); }
         .card-subtitle { font-size: 18px; font-weight: 600; margin-bottom: 18px; color: #fff; border-left: 4px solid #ff6ebb; padding-left: 10px; }
         .custom-textarea { width: 100%; height: 90px; background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 15px; color: #fff; font-size: 15px; resize: none; outline: none; transition: all 0.3s; }
@@ -73,23 +116,17 @@
         .pos { color: #34d399; }
         .neg { color: #f87171; }
 
-        /* ==================== 🌟 重新设计的：二次元全息终端风格 ==================== */
+        /* ==================== 二次元全息终端风格 ==================== */
         .terminal-box {
-            /* 替换掉了突兀的黑绿色，改成了融合度极高的半透明幻彩背景 */
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 110, 187, 0.05)) !important; 
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 110, 187, 0.05)) !important; 
             border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            border-left: 4px solid #a29bfe !important; /* 优雅的淡紫色侧边 */
+            border-left: 4px solid #a29bfe !important; 
             box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.05) !important;
             display: flex; flex-direction: column;
         }
         .terminal-title { color: #fff !important; border-left: none !important; padding-left: 0 !important; }
-        .terminal-content { 
-            font-size: 14px; line-height: 1.6; 
-            color: #f8fafc; /* 柔和的白色文字 */
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-            flex: 1;
-        }
-        .cursor-blink { color: #ff6ebb; animation: blink 1s step-end infinite; } /* 粉色闪烁光标 */
+        .terminal-content { font-size: 14px; line-height: 1.6; color: #f8fafc; text-shadow: 0 0 5px rgba(255, 255, 255, 0.3); flex: 1; }
+        .cursor-blink { color: #ff6ebb; animation: blink 1s step-end infinite; }
         @keyframes blink { 50% { opacity: 0; } }
 
         /* ==================== 7. 弹窗通用样式 ==================== */
@@ -105,55 +142,108 @@
 
     <div class="main-board">
         <h1 class="board-title">[-] 大学生生涯状态模拟舱 [-]</h1>
-        <div class="content-layout">
-            
-            <div class="column-left">
-                <div class="glass-card" style="flex: 0 0 auto;">
-                    <p class="card-subtitle">[日志] 今日行动日志</p>
-                    <textarea id="daily-input" class="custom-textarea" placeholder="在这里写下你今天的经历...例如：今天清晨在操场晨跑了3公里，感觉神清气爽！"></textarea>
-                    <div class="btn-group">
-                        <button class="action-btn btn-clear" onclick="document.getElementById('daily-input').value=''">清空输入</button>
-                        <button class="action-btn btn-submit" id="submit-btn" onclick="submitDiary()">AI 结算属性</button>
-                    </div>
-                </div>
+        
+        <div class="game-menu">
+            <button class="menu-btn active" onclick="switchPage('page-home', this)">⚙️ 舱体主页</button>
+            <button class="menu-btn" onclick="switchPage('page-archive', this)">👤 角色档案</button>
+            <button class="menu-btn" onclick="switchPage('page-map', this)">🗺️ 校园地图</button>
+        </div>
 
-                <div class="glass-card" style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
-                    <p class="card-subtitle">[记录] 历史足迹</p>
-                    <div id="history-log-container" class="history-container">
-                        <div class="empty-hint" id="empty-hint">暂无行动记录，快去开启今天的生活吧！</div>
-                    </div>
-                </div>
-
-                <div class="glass-card terminal-box" id="summary-box" style="flex: 0 0 auto; min-height: 120px;">
-                    <p class="card-subtitle terminal-title">📡 校园频道接收器</p>
-                    <p class="terminal-content"><span id="summary-text">正在搜索校园信号...</span><span class="cursor-blink">█</span></p>
-                </div>
-            </div>
-
-            <div class="column-right">
-                <div class="glass-card">
-                    <div class="profile-header">
-                        <div class="avatar-wrapper" onclick="document.getElementById('avatar-upload').click()" title="点击更换头像">
-                            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=xiaoyang&backgroundColor=b6e3f4" alt="头像" class="avatar" id="player-avatar">
-                            <div class="avatar-hover-overlay">更换</div>
-                        </div>
-                        <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
-                        
-                        <div class="profile-info">
-                            <div class="player-name" id="display-name" onclick="changeName()" title="点击修改昵称">玩家：小阳 ✏️</div>
-                            <div class="title-badge" id="player-title">LV.1 迷茫大一新生</div>
+        <div id="page-home" class="game-page active">
+            <div class="content-layout">
+                <div class="column-left">
+                    <div class="glass-card" style="flex: 0 0 auto;">
+                        <p class="card-subtitle">[日志] 今日行动日志</p>
+                        <textarea id="daily-input" class="custom-textarea" placeholder="在这里写下你今天的经历...例如：今天清晨在操场晨跑了3公里，感觉神清气爽！"></textarea>
+                        <div class="btn-group">
+                            <button class="action-btn btn-clear" onclick="document.getElementById('daily-input').value=''">清空输入</button>
+                            <button class="action-btn btn-submit" id="submit-btn" onclick="submitDiary()">AI 结算属性</button>
                         </div>
                     </div>
 
-                    <p class="card-subtitle">[状态] 核心数值面板</p>
-                    <div class="status-item"><div class="status-info"><span>体力 (Stamina)</span><span id="stamina-delta" class="delta-badge"></span></div><div class="progress-track"><div class="progress-fill" id="stamina-fill"></div><span class="progress-text" id="stamina-val">70/100</span></div></div>
-                    <div class="status-item"><div class="status-info"><span>智力 (Intelligence)</span><span id="intelligence-delta" class="delta-badge"></span></div><div class="progress-track"><div class="progress-fill" id="intelligence-fill"></div><span class="progress-text" id="intelligence-val">50/100</span></div></div>
-                    <div class="status-item"><div class="status-info"><span>心情 (Mood)</span><span id="mood-delta" class="delta-badge"></span></div><div class="progress-track"><div class="progress-fill" id="mood-fill"></div><span class="progress-text" id="mood-val">60/100</span></div></div>
-                    <div class="status-item"><div class="status-info"><span>财力 (Wealth)</span><span id="wealth-delta" class="delta-badge"></span></div><div class="progress-track"><div class="progress-fill" id="wealth-fill"></div><span class="progress-text" id="wealth-val">40/100</span></div></div>
-                    <div class="status-item"><div class="status-info"><span>魅力 (Charm)</span><span id="charm-delta" class="delta-badge"></span></div><div class="progress-track"><div class="progress-fill" id="charm-fill"></div><span class="progress-text" id="charm-val">50/100</span></div></div>
+                    <div class="glass-card" style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+                        <p class="card-subtitle">[记录] 历史足迹</p>
+                        <div id="history-log-container" class="history-container">
+                            <div class="empty-hint" id="empty-hint">暂无行动记录，快去开启今天的生活吧！</div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card terminal-box" id="summary-box" style="flex: 0 0 auto; min-height: 120px;">
+                        <p class="card-subtitle terminal-title">📡 校园频道接收器</p>
+                        <p class="terminal-content"><span id="summary-text">正在搜索校园信号...</span><span class="cursor-blink">█</span></p>
+                    </div>
+                </div>
+
+                <div class="column-right">
+                    <div class="glass-card">
+                        <div class="profile-header">
+                            <div class="avatar-wrapper" onclick="document.getElementById('avatar-upload').click()" title="点击更换头像">
+                                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=xiaoyang&backgroundColor=b6e3f4" alt="头像" class="avatar" id="player-avatar">
+                                <div class="avatar-hover-overlay">更换</div>
+                            </div>
+                            <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
+                            
+                            <div class="profile-info">
+                                <div class="player-name" id="display-name" onclick="changeName()" title="点击修改昵称">玩家：小阳 ✏️</div>
+                                <div class="title-badge" id="player-title">LV.1 迷茫大一新生</div>
+                            </div>
+                        </div>
+
+                        <p class="card-subtitle">[状态] 核心数值面板</p>
+                        <div class="status-item"><div class="status-info"><span>体力 (Stamina)</span><span id="stamina-delta" class="delta-badge"></span></div><div class="progress-track"><div class="progress-fill" id="stamina-fill"></div><span class="progress-text" id="stamina-val">70/100</span></div></div>
+                        <div class="status-item"><div class="status-info"><span>智力 (Intelligence)</span><span id="intelligence-delta" class="delta-badge"></span></div><div class="progress-track"><div class="progress-fill" id="intelligence-fill"></div><span class="progress-text" id="intelligence-val">50/100</span></div></div>
+                        <div class="status-item"><div class="status-info"><span>心情 (Mood)</span><span id="mood-delta" class="delta-badge"></span></div><div class="progress-track"><div class="progress-fill" id="mood-fill"></div><span class="progress-text" id="mood-val">60/100</span></div></div>
+                        <div class="status-item"><div class="status-info"><span>财力 (Wealth)</span><span id="wealth-delta" class="delta-badge"></span></div><div class="progress-track"><div class="progress-fill" id="wealth-fill"></div><span class="progress-text" id="wealth-val">40/100</span></div></div>
+                        <div class="status-item"><div class="status-info"><span>魅力 (Charm)</span><span id="charm-delta" class="delta-badge"></span></div><div class="progress-track"><div class="progress-fill" id="charm-fill"></div><span class="progress-text" id="charm-val">50/100</span></div></div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div id="page-archive" class="game-page" style="overflow-y: auto;">
+            <div class="glass-card" style="width: 100%;">
+                <p class="card-subtitle">[档案] 隐藏衍生属性与装备</p>
+                <div class="archive-grid">
+                    <div class="glass-card" style="background: rgba(0,0,0,0.2);">
+                        <h4 style="color: #ff6ebb; margin-bottom: 8px;">🎒 当前装备栏</h4>
+                        <p style="font-size: 14px; color: #cbd5e1; line-height: 1.8;">
+                            • 头部：[熬夜冠军防脱发头带] (智力+5)<br>
+                            • 身体：[防寒格子衬衫] (稳重度+10)<br>
+                            • 脚部：[疯狂赶课大飚速拖鞋] (敏捷+15)
+                        </p>
+                    </div>
+                    <div class="glass-card" style="background: rgba(0,0,0,0.2);">
+                        <h4 style="color: #a29bfe; margin-bottom: 8px;">🌟 隐藏衍生羁绊</h4>
+                        <p style="font-size: 14px; color: #cbd5e1; line-height: 1.8;">
+                            • 辅导员好感度：50/100 (关系：相安无事)<br>
+                            • 宿管大妈羁绊：20/100 (关系：经常被查寝)<br>
+                            • 饭堂阿姨玄学：75/100 (关系：打菜可能多块肉)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-map" class="game-page" style="overflow-y: auto;">
+            <div class="glass-card" style="width: 100%;">
+                <p class="card-subtitle">[探索] 探索今日校园场景</p>
+                <div class="map-list">
+                    <div class="map-item" onclick="alert('你来到了图书馆，周围全是卷王。系统建议你立刻掏出微积分加入战斗！')">
+                        <h3 style="color: #3b82f6; margin-bottom: 4px;">📍 24小时自修图书馆</h3>
+                        <p style="font-size: 13px; color: #cbd5e1;">前往该场景有概率大幅增加【智力】，但可能扣除【心情】。</p>
+                    </div>
+                    <div class="map-item" onclick="alert('寝室的大床对你发出了强烈的封印魔法！你感到封印无法解除。')">
+                        <h3 style="color: #10b981; margin-bottom: 4px;">📍 温馨回血阳光宿舍</h3>
+                        <p style="font-size: 13px; color: #cbd5e1;">前往该场景可极速回满【体力】，但有概率使【财力】因点外卖而受损。</p>
+                    </div>
+                    <div class="map-item" onclick="alert('后街灯火通明，烟火气扑面而来。你炫了一碗螺蛳粉，满足感爆棚！')">
+                        <h3 style="color: #f59e0b; margin-bottom: 4px;">📍 小吃聚集地堕落后街</h3>
+                        <p style="font-size: 13px; color: #cbd5e1;">前往该场景将暴击增加【心情】与【魅力】，但会稳定扣除【财力】。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <dialog class="glass-dialog" id="npc-dialog">
@@ -207,6 +297,27 @@
             const randomMsg = campusEvents[Math.floor(Math.random() * campusEvents.length)];
             setTimeout(() => typeWriter(randomMsg), 500); 
         };
+
+        // 🌟 新增：多页面虚拟切换核心控制函数
+        function switchPage(pageId, btnElement) {
+            const pages = document.querySelectorAll('.game-page');
+            pages.forEach(page => {
+                page.classList.remove('active');
+                page.style.display = 'none';
+            });
+
+            const targetPage = document.getElementById(pageId);
+            targetPage.classList.add('active');
+            if (pageId === 'page-home') {
+                targetPage.style.display = 'flex';
+            } else {
+                targetPage.style.display = 'block';
+            }
+
+            const buttons = document.querySelectorAll('.menu-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+        }
 
         async function submitDiary() {
             const input = document.getElementById('daily-input').value;
@@ -268,7 +379,7 @@
 
         function renderBars() {
             const keys = ['stamina', 'intelligence', 'mood', 'wealth', 'charm'];
-            keys.forEach(key => { document.getElementById(key + '-fill').style.width = userStats[key] + '%'; document.getElementById(key + '-val').innerText = userStats[key] + '/100'; });
+            keys.forEach(key => { document.getElementById(key + '-fill').style.width = userStats[key] + '%'; document.getElementById(key + '/100'); document.getElementById(key + '-val').innerText = userStats[key] + '/100'; });
         }
 
         function checkTitleEvolution() {
