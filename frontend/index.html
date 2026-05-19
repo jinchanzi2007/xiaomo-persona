@@ -3,300 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UNISIM 模拟舱 - 控制终端</title>
+    <title>大学属性面板 - 扁平描边版 (Neo-Brutalism)</title>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
     <style>
-        /* ==================== 1. 全局与色彩体系 ==================== */
-        :root {
-            --ganyu: #003C75;         /* 绀宇：主描边、深色文字、主按钮填充 */
-            --biluo: #AFD0F2;         /* 碧落：硬阴影、浅色填充、次级标签 */
-            --bg-light: #F4F9FF;      /* 极浅的碧落色，用作全局背景 */
-            --card-bg: #FFFFFF;       /* 纯白，用作卡片底色 */
-            --border-width: 2.5px;    /* 统一的粗描边宽度 */
-        }
-
+        /* ==================== 1. 全局与扁平背景 ==================== */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
-        
         body { 
             width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; 
-            background-color: var(--bg-light);
-            color: var(--ganyu);
-            /* 添加微弱的点阵背景增加极客感 */
-            background-image: radial-gradient(var(--biluo) 1px, transparent 1px);
+            background: #e5e5f7; /* 图片中偏暖灰/带有细微纹理的底色 */
+            background-image:  radial-gradient(#d1d5db 1px, transparent 1px);
             background-size: 20px 20px;
+            color: #1e293b; 
         }
 
-        /* ==================== 2. 核心大画板 (新粗野主义风格) ==================== */
+        /* 主色彩变量 */
+        :root {
+            --border-color: #1e293b;
+            --bg-white: #ffffff;
+            --red-active: #dc2626;
+            --green-success: #10b981;
+            --dark-btn: #1e293b;
+            --border-width: 2px;
+        }
+
+        /* ==================== 2. 主画板容器 ==================== */
         .main-board { 
-            position: relative; z-index: 1; width: 95%; max-width: 1200px; height: 88vh; 
-            background: var(--bg-light); 
-            border: var(--border-width) solid var(--ganyu); 
+            position: relative; z-index: 1; width: 90%; max-width: 1150px; height: 85vh; 
+            background: #f8fafc; 
+            border: var(--border-width) solid var(--border-color); 
             border-radius: 16px; 
-            box-shadow: 8px 8px 0px var(--biluo); /* 标志性的硬阴影 */
-            display: flex; flex-direction: column; padding: 25px 30px; 
+            box-shadow: 8px 8px 0px rgba(30, 41, 59, 0.15); /* 硬阴影 */
+            display: flex; flex-direction: column; padding: 35px; 
         }
-        
-        .header-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 25px; border-bottom: var(--border-width) solid var(--ganyu);
-            padding-bottom: 15px;
-        }
-
         .board-title { 
-            font-size: 22px; font-weight: 800; letter-spacing: 1px; 
-            display: flex; align-items: center; gap: 10px;
+            text-align: center; font-size: 26px; font-weight: 800; letter-spacing: 1px; 
+            color: var(--border-color); margin-bottom: 25px; 
+            display: flex; align-items: center; justify-content: center; gap: 10px;
         }
         .board-title::before {
-            content: '盾'; display: inline-flex; justify-content: center; align-items: center;
-            width: 32px; height: 32px; background: var(--ganyu); color: white;
-            border-radius: 8px; font-size: 16px; font-weight: bold;
+            content: '盾'; background: var(--red-active); color: #fff; font-size: 16px; width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; border-radius: 8px; border: var(--border-width) solid var(--border-color); box-shadow: 2px 2px 0px var(--border-color);
         }
         
-        /* ==================== 3. 游戏多菜单 (胶囊按钮) ==================== */
-        .game-menu { display: flex; gap: 12px; flex-shrink: 0; }
+        /* ==================== 3. 目标按钮风格 (核心改造区) ==================== */
+        .game-menu { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 30px; border-bottom: var(--border-width) solid rgba(30, 41, 59, 0.1); padding-bottom: 20px; flex-shrink: 0; }
+        
+        /* 基础胶囊按钮风格 */
         .menu-btn { 
-            background: var(--card-bg); border: var(--border-width) solid var(--ganyu); 
-            padding: 8px 20px; border-radius: 50px; /* 完全圆角 */
-            color: var(--ganyu); font-size: 14px; font-weight: 700; cursor: pointer; 
-            transition: all 0.2s ease; 
-            box-shadow: 2px 2px 0px var(--biluo);
+            background: var(--bg-white); 
+            border: var(--border-width) solid var(--border-color); 
+            padding: 8px 24px; 
+            border-radius: 50px; /* 胶囊圆角 */
+            color: var(--border-color); 
+            font-size: 14px; font-weight: 700; 
+            cursor: pointer; 
+            transition: all 0.15s ease; 
+            box-shadow: 2px 2px 0px var(--border-color); /* 按钮硬阴影 */
         }
-        .menu-btn:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0px var(--biluo); }
+        .menu-btn:hover { 
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0px var(--border-color); 
+        }
+        .menu-btn:active {
+            transform: translate(0px, 0px);
+            box-shadow: 0px 0px 0px var(--border-color); 
+        }
+        /* 选中状态（参考图片中的红色标签） */
         .menu-btn.active { 
-            background: var(--ganyu); color: #fff; 
-            box-shadow: none; transform: translate(2px, 2px);
+            background: var(--red-active); 
+            color: #ffffff; 
         }
-        
-        .game-page { display: none; width: 100%; height: 100%; overflow: hidden; margin-top: 15px; }
-        .game-page.active { display: flex; }
 
-        /* ==================== 4. 描边卡片 (Neo-Card) ==================== */
-        .content-layout { flex: 1; display: flex; gap: 25px; overflow: hidden; width: 100%; height: 100%; }
-        .column-left { flex: 1.1; display: flex; flex-direction: column; gap: 18px; overflow: hidden; }
-        .column-right { flex: 0.9; display: flex; flex-direction: column; gap: 18px; overflow-y: auto; padding-right: 5px; }
+        .game-page { display: none; width: 100%; height: 100%; overflow: hidden; }
+        .game-page.active { display: flex; }
+        
+        /* ==================== 4. 扁平卡片与操作区 ==================== */
+        .content-layout { flex: 1; display: flex; gap: 30px; overflow: hidden; width: 100%; height: 100%; }
+        .column-left { flex: 1.1; display: flex; flex-direction: column; gap: 20px; overflow: hidden; }
+        .column-right { flex: 0.9; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; padding-right: 5px; }
         .column-right::-webkit-scrollbar { width: 0px; }
         
-        .neo-card { 
-            background: var(--card-bg); 
-            border: var(--border-width) solid var(--ganyu); 
-            border-radius: 12px; padding: 20px; 
-            box-shadow: 4px 4px 0px rgba(175, 208, 242, 0.5); 
-            position: relative;
+        .panel-card { 
+            background: var(--bg-white); 
+            border: var(--border-width) solid var(--border-color); 
+            border-radius: 12px; padding: 24px; 
+            box-shadow: 4px 4px 0px rgba(30, 41, 59, 0.05); 
         }
+
+        .card-subtitle { font-size: 16px; font-weight: 800; margin-bottom: 18px; color: var(--border-color); }
         
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .card-subtitle { font-size: 16px; font-weight: 700; color: var(--ganyu); }
-        .card-badge { 
-            border: 2px solid var(--ganyu); border-radius: 20px; 
-            padding: 2px 10px; font-size: 12px; font-weight: bold; 
-            color: var(--ganyu); background: var(--bg-light);
-        }
-        
-        /* 输入区 */
+        /* 输入框适配描边风格 */
         .custom-textarea { 
-            width: 100%; height: 90px; background: var(--bg-light); 
-            border: var(--border-width) solid var(--ganyu); border-radius: 8px; 
-            padding: 12px; color: var(--ganyu); font-size: 14px; font-weight: 500; resize: none; outline: none; transition: 0.2s; 
+            width: 100%; height: 90px; background: #f8fafc; 
+            border: var(--border-width) solid var(--border-color); 
+            border-radius: 8px; padding: 15px; color: #1e293b; font-size: 14px; font-weight: 500; resize: none; outline: none; transition: all 0.2s; 
         }
-        .custom-textarea:focus { background: #fff; box-shadow: inset 0 0 0 2px var(--biluo); }
+        .custom-textarea:focus { background: #fff; box-shadow: 4px 4px 0px rgba(30, 41, 59, 0.1); }
         
-        .btn-group { display: flex; gap: 12px; margin-top: 12px; }
+        /* 操作按钮 */
+        .btn-group { display: flex; gap: 15px; margin-top: 15px; }
         .action-btn { 
-            flex: 1; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s; 
-            border: var(--border-width) solid var(--ganyu);
-            box-shadow: 2px 2px 0px var(--biluo);
+            flex: 1; padding: 12px; border-radius: 50px; font-size: 14px; font-weight: 700; cursor: pointer; 
+            border: var(--border-width) solid var(--border-color);
+            transition: all 0.15s ease;
+            box-shadow: 2px 2px 0px var(--border-color);
         }
-        .btn-clear { background: var(--card-bg); color: var(--ganyu); }
-        .btn-clear:hover { background: var(--bg-light); }
-        .btn-submit { background: var(--ganyu); color: #fff; }
-        .btn-submit:hover { background: #002b54; }
-        .action-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+        .action-btn:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0px var(--border-color); }
+        .action-btn:active { transform: translate(0px, 0px); box-shadow: 0px 0px 0px var(--border-color); }
+        
+        .btn-clear { background: var(--bg-white); color: var(--border-color); }
+        .btn-submit { background: var(--dark-btn); color: #ffffff; } /* 类似图片中黑色的载入数据按钮 */
+
+        /* 微型状态标签 (类似图片中 待确认/进行中/完成) */
+        .status-pill {
+            display: inline-block; padding: 2px 10px; border-radius: 50px; border: var(--border-width) solid var(--border-color);
+            font-size: 12px; font-weight: 700; background: var(--bg-white); cursor: pointer; box-shadow: 1px 1px 0px var(--border-color);
+        }
+        .status-pill.success { background: var(--green-success); color: #fff; }
 
         /* ==================== 5. 历史足迹 ==================== */
         .history-container { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 8px; }
         .history-container::-webkit-scrollbar { width: 6px; }
-        .history-container::-webkit-scrollbar-track { background: var(--bg-light); border-radius: 4px; border: 1px solid var(--ganyu);}
-        .history-container::-webkit-scrollbar-thumb { background: var(--ganyu); border-radius: 4px; }
-        
-        .log-item { 
-            background: var(--card-bg); border: 2px solid var(--ganyu); 
-            padding: 12px; border-radius: 8px; font-size: 13px; font-weight: 500;
-            box-shadow: 2px 2px 0px var(--biluo);
-            animation: fadeIn 0.4s ease-out; 
-        }
-        .log-time { color: var(--ganyu); opacity: 0.7; font-size: 12px; margin-bottom: 6px; font-family: monospace; font-weight: bold;}
-        .log-text { margin-bottom: 8px; line-height: 1.5; }
+        .history-container::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        .log-item { background: #f8fafc; border: var(--border-width) solid var(--border-color); padding: 15px; border-radius: 8px; font-size: 13px; box-shadow: 2px 2px 0px rgba(30,41,59,0.1); animation: fadeIn 0.3s ease-out; }
+        .log-time { color: #64748b; font-size: 11px; margin-bottom: 6px; font-weight: bold; }
+        .log-text { color: var(--border-color); margin-bottom: 10px; line-height: 1.5; font-weight: 600;}
         .log-stats { display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px; font-weight: 700; }
-        .empty-hint { text-align: center; color: var(--ganyu); opacity: 0.5; font-weight: bold; margin-top: 20px; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ==================== 6. RPG 角色信息区 ==================== */
-        .profile-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: var(--border-width) solid var(--ganyu); }
-        .avatar-wrapper { position: relative; width: 64px; height: 64px; border-radius: 50%; cursor: pointer; overflow: hidden; border: var(--border-width) solid var(--ganyu); background: var(--biluo); }
-        .avatar { width: 100%; height: 100%; object-fit: cover; }
-        .avatar-hover-overlay { position: absolute; inset: 0; background: rgba(0,60,117,0.8); color: #fff; display: flex; justify-content: center; align-items: center; font-size: 12px; font-weight: bold; opacity: 0; transition: 0.3s; }
-        .avatar-wrapper:hover .avatar-hover-overlay { opacity: 1; }
-        
-        .profile-info { display: flex; flex-direction: column; gap: 6px; }
-        .player-name { font-size: 18px; font-weight: 800; color: var(--ganyu); cursor: pointer; }
-        .title-badge { 
-            background: var(--biluo); border: 2px solid var(--ganyu); 
-            padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; color: var(--ganyu); 
-            display: inline-block; width: fit-content; 
-        }
+        /* ==================== 6. 个人档案区 ==================== */
+        .profile-header { display: flex; align-items: center; gap: 20px; margin-bottom: 30px; padding-bottom: 20px; border-bottom: var(--border-width) dashed rgba(30, 41, 59, 0.2); }
+        .avatar-wrapper { position: relative; width: 75px; height: 75px; border-radius: 50%; cursor: pointer; overflow: hidden; border: var(--border-width) solid var(--border-color); box-shadow: 4px 4px 0px rgba(30,41,59,0.1); background: #e2e8f0; }
+        .avatar { width: 100%; height: 100%; object-fit: cover; transition: 0.2s; }
+        .avatar-wrapper:hover .avatar { transform: scale(1.1); }
+        .profile-info { display: flex; flex-direction: column; gap: 8px; }
+        .player-name { font-size: 20px; font-weight: 800; color: var(--border-color); cursor: pointer; }
+        .title-badge { background: #fef08a; border: var(--border-width) solid var(--border-color); padding: 4px 12px; border-radius: 50px; font-size: 12px; font-weight: 700; color: var(--border-color); display: inline-block; width: fit-content; box-shadow: 2px 2px 0px var(--border-color); }
 
-        /* ==================== 7. 描边进度条 ==================== */
-        .status-item { margin-bottom: 15px; }
-        .status-info { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
-        .progress-track { 
-            width: 100%; height: 16px; background: var(--bg-light); 
-            border: var(--border-width) solid var(--ganyu); border-radius: 10px; 
-            overflow: hidden; position: relative; 
-        }
-        .progress-fill { 
-            height: 100%; width: 50%; border-radius: 0; /* 直角填充 */
-            background: var(--biluo); 
-            border-right: var(--border-width) solid var(--ganyu); /* 填充边缘描边 */
-            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
-        }
-        .progress-text { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 11px; font-weight: 800; color: var(--ganyu); font-family: monospace; z-index: 2;}
-        .delta-badge { font-weight: 800; font-size: 12px; font-family: monospace; }
-        .pos { color: #008f51; } /* 正面使用深绿 */
-        .neg { color: #d93025; } /* 负面使用深红 */
+        /* ==================== 7. 描边风状态条 ==================== */
+        .status-item { margin-bottom: 20px; }
+        .status-info { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; align-items: center; color: var(--border-color); font-weight: 800;}
+        .progress-track { width: 100%; height: 16px; background: #e2e8f0; border: var(--border-width) solid var(--border-color); border-radius: 50px; overflow: hidden; position: relative; }
+        .progress-fill { height: 100%; width: 50%; transition: width 0.4s ease; border-right: var(--border-width) solid var(--border-color); background: var(--red-active); }
+        .progress-text { position: absolute; right: 10px; top: 0px; font-size: 11px; font-weight: 900; color: var(--border-color); line-height: 14px;}
+        .delta-badge { font-weight: 900; font-size: 13px; }
+        .pos { color: var(--green-success); }
+        .neg { color: var(--red-active); } 
 
-        /* ==================== 8. 终端接收器 ==================== */
-        .terminal-box { 
-            background: var(--ganyu); color: #fff; 
-            border: var(--border-width) solid var(--ganyu);
-        }
-        .terminal-box .card-subtitle { color: var(--biluo); }
-        .terminal-box .card-badge { border-color: var(--biluo); color: var(--biluo); background: transparent; }
-        .terminal-content { font-family: 'Courier New', Courier, monospace; font-size: 13px; font-weight: bold; line-height: 1.6; color: #fff; flex: 1; }
-        .cursor-blink { color: var(--biluo); animation: blink 1s step-end infinite; }
+        /* ==================== 8. 终端日志/广播 ==================== */
+        .terminal-box { background: #fef08a !important; border: var(--border-width) solid var(--border-color) !important; display: flex; flex-direction: column; box-shadow: 4px 4px 0px rgba(30,41,59,0.1); }
+        .terminal-title { color: var(--border-color) !important; font-size: 12px !important; letter-spacing: 1px; display: flex; justify-content: space-between; }
+        .terminal-content { font-family: monospace; font-size: 13px; line-height: 1.6; color: var(--border-color); font-weight: 700; flex: 1; }
+        .cursor-blink { animation: blink 1s step-end infinite; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* ==================== 9. 校园地图 & 档案网格 ==================== */
-        .archive-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; }
-        .neo-card-inner {
-            background: var(--bg-light); border: 2px solid var(--ganyu); border-radius: 8px; padding: 15px;
-        }
-        .neo-card-inner h4 { margin-bottom: 10px; font-size: 14px; }
-        .neo-card-inner p { font-size: 13px; font-weight: 500; line-height: 1.8; }
+        /* ==================== 9. 弹窗 ==================== */
+        .glass-dialog { border: var(--border-width) solid var(--border-color); background: var(--bg-white); border-radius: 16px; padding: 30px; width: 450px; color: var(--border-color); box-shadow: 8px 8px 0px rgba(30, 41, 59, 0.8); margin: auto; }
+        .glass-dialog::backdrop { background: rgba(30, 41, 59, 0.4); }
+        .dialog-title { font-size: 20px; font-weight: 800; margin-bottom: 20px; border-bottom: var(--border-width) solid var(--border-color); padding-bottom: 10px; display: flex; align-items: center; gap: 8px;}
+        .dialog-title::before { content: ''; display: inline-block; width: 12px; height: 12px; background: var(--red-active); border-radius: 50%; border: 2px solid var(--border-color); }
         
-        .map-list { display: flex; flex-direction: column; gap: 12px; width: 100%; }
-        .map-item { 
-            background: var(--card-bg); padding: 15px; border-radius: 12px; 
-            border: var(--border-width) solid var(--ganyu); cursor: pointer; transition: 0.2s; 
-            box-shadow: 2px 2px 0px var(--biluo);
-        }
-        .map-item:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0px var(--biluo); }
-        .map-item:active { transform: translate(2px, 2px); box-shadow: none; }
-        .map-item h3 { font-size: 15px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
-        .map-item p { font-size: 12px; font-weight: 500; opacity: 0.8; }
-
-        /* ==================== 10. 极简弹窗 ==================== */
-        .glass-dialog { 
-            border: var(--border-width) solid var(--ganyu); background: var(--card-bg); 
-            border-radius: 12px; padding: 25px; width: 400px; box-shadow: 8px 8px 0px var(--biluo); margin: auto; 
-        }
-        .glass-dialog::backdrop { background: rgba(0, 60, 117, 0.4); }
-        .dialog-title { color: var(--ganyu); font-size: 18px; font-weight: 800; margin-bottom: 15px; border-bottom: 2px solid var(--ganyu); padding-bottom: 10px; }
-        .dialog-btn { 
-            background: var(--ganyu); border: 2px solid var(--ganyu); padding: 8px 20px; color: #fff; 
-            border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 15px; transition: 0.2s; box-shadow: 2px 2px 0px var(--biluo);
-        }
-        .dialog-btn:active { transform: translate(2px, 2px); box-shadow: none; }
-        .img-container { width: 100%; height: 300px; background-color: var(--bg-light); border-radius: 8px; overflow: hidden; margin-bottom: 15px; border: 2px solid var(--ganyu); }
+        .dialog-btn { background: var(--dark-btn); border: var(--border-width) solid var(--border-color); padding: 10px 24px; color: #ffffff; border-radius: 50px; font-weight: 700; cursor: pointer; margin-top: 15px; box-shadow: 2px 2px 0px var(--border-color); transition: 0.15s; }
+        .dialog-btn:hover { transform: translate(-2px,-2px); box-shadow: 4px 4px 0px var(--border-color); }
+        .dialog-btn:active { transform: translate(0,0); box-shadow: 0px 0px 0px var(--border-color); }
+        .img-container { width: 100%; height: 350px; background-color: #f1f5f9; border-radius: 8px; border: var(--border-width) solid var(--border-color); overflow: hidden; margin-bottom: 20px; }
         .img-container img { display: block; max-width: 100%; }
+
+        h3, h4 { color: var(--border-color) !important; font-weight: 800; }
+        .desc-text { font-size: 13px; color: #475569; line-height: 1.8; margin-top: 8px; font-weight: 500; }
     </style>
 </head>
 <body>
 
     <div class="main-board">
-        <div class="header-bar">
-            <h1 class="board-title">UNISIM</h1>
-            <div class="game-menu">
-                <button class="menu-btn active" onclick="switchPage('page-home', this)">今日行动卡</button>
-                <button class="menu-btn" onclick="switchPage('page-archive', this)">资料归档库</button>
-                <button class="menu-btn" onclick="switchPage('page-map', this)">区域探测器</button>
-            </div>
+        <h1 class="board-title">FreshShield 生涯模拟舱</h1>
+        
+        <div class="game-menu">
+            <button class="menu-btn active" onclick="switchPage('page-home', this)">今日风险舱</button>
+            <button class="menu-btn" onclick="switchPage('page-archive', this)">资料收件箱</button>
+            <button class="menu-btn" onclick="switchPage('page-map', this)">任务池</button>
+            <button class="menu-btn" onclick="switchPage('page-archive', this)">身份与记忆</button>
         </div>
 
         <div id="page-home" class="game-page active" style="display: flex;">
             <div class="content-layout">
                 <div class="column-left">
-                    <div class="neo-card" style="flex: 0 0 auto;">
-                        <div class="card-header">
-                            <span class="card-subtitle">录入指令</span>
-                            <span class="card-badge">To Do</span>
-                        </div>
-                        <textarea id="daily-input" class="custom-textarea" placeholder="输入当前任务记录..."></textarea>
+                    <div class="panel-card" style="flex: 0 0 auto;">
+                        <p class="card-subtitle">今日行动卡</p>
+                        <textarea id="daily-input" class="custom-textarea" placeholder="在此输入行动记录..."></textarea>
                         <div class="btn-group">
-                            <button class="action-btn btn-clear" onclick="document.getElementById('daily-input').value=''">清除</button>
-                            <button class="action-btn btn-submit" id="submit-btn" onclick="submitDiary()">提交演算</button>
+                            <button class="action-btn btn-clear" onclick="document.getElementById('daily-input').value=''">清空重置</button>
+                            <button class="action-btn btn-submit" id="submit-btn" onclick="submitDiary()">开启演算权限</button>
                         </div>
                     </div>
 
-                    <div class="neo-card" style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
-                        <div class="card-header">
-                            <span class="card-subtitle">指令日志池</span>
-                            <span class="card-badge">History</span>
-                        </div>
+                    <div class="panel-card" style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+                        <p class="card-subtitle">模拟主动提醒</p>
                         <div id="history-log-container" class="history-container">
-                            <div class="empty-hint" id="empty-hint">暂无处理任务</div>
+                            <div style="text-align: center; margin-top: 20px; color: #94a3b8; font-weight: bold;" id="empty-hint">暂无风险提醒，等待数据载入...</div>
                         </div>
                     </div>
 
-                    <div class="neo-card terminal-box" id="summary-box" style="flex: 0 0 auto; min-height: 110px;">
-                        <div class="card-header">
-                            <span class="card-subtitle">系统广播</span>
-                            <span class="card-badge">Radio</span>
-                        </div>
-                        <p class="terminal-content"><span id="summary-text">Awaiting input...</span><span class="cursor-blink">_</span></p>
+                    <div class="panel-card terminal-box" id="summary-box" style="flex: 0 0 auto; min-height: 110px;">
+                        <p class="card-subtitle terminal-title"><span>Nudge Broadcast</span> <span class="status-pill success" style="box-shadow:none;">Running</span></p>
+                        <p class="terminal-content"><span id="summary-text">Awaiting synchronization...</span><span class="cursor-blink">_</span></p>
                     </div>
                 </div>
 
                 <div class="column-right">
-                    <div class="neo-card">
-                        <div class="card-header" style="margin-bottom: 0;">
-                            <span class="card-subtitle">身份与状态</span>
-                            <span class="card-badge">Profile</span>
-                        </div>
-                        <div class="profile-header" style="margin-top: 15px;">
-                            <div class="avatar-wrapper" onclick="document.getElementById('avatar-upload').click()" title="更换影像">
-                                <img src="https://api.dicebear.com/7.x/bottts/svg?seed=xiaoyang&backgroundColor=003C75" alt="头像" class="avatar" id="player-avatar">
-                                <div class="avatar-hover-overlay">更换</div>
+                    <div class="panel-card">
+                        <div class="profile-header">
+                            <div class="avatar-wrapper" onclick="document.getElementById('avatar-upload').click()" title="更换身份标识">
+                                <img src="https://api.dicebear.com/7.x/notionists/svg?seed=student&backgroundColor=fef08a" alt="头像" class="avatar" id="player-avatar">
                             </div>
                             <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
                             
                             <div class="profile-info">
-                                <div class="player-name" id="display-name" onclick="changeName()" title="点击修改ID">操作员：小阳 ✎</div>
-                                <div class="title-badge" id="player-title">当前权限：LV.1</div>
+                                <div class="player-name" id="display-name" onclick="changeName()" title="修改身份名称">用户 6023</div>
+                                <div class="title-badge" id="player-title">高风险指数</div>
                             </div>
                         </div>
 
+                        <p class="card-subtitle" style="display:flex; justify-content:space-between;">风险雷达指数 <span class="status-pill" style="color:var(--red-active); border-color:var(--red-active);">Risk Scan</span></p>
                         <div class="status-item">
-                            <div class="status-info"><span>体力 (Stamina)</span><span id="stamina-delta" class="delta-badge"></span></div>
-                            <div class="progress-track"><div class="progress-fill" id="stamina-fill"></div><span class="progress-text" id="stamina-val">70/100</span></div>
+                            <div class="status-info"><span>体能警告 (Stamina)</span><span id="stamina-delta" class="delta-badge"></span></div>
+                            <div class="progress-track"><div class="progress-fill" id="stamina-fill" style="background:var(--border-color);"></div><span class="progress-text" id="stamina-val">70/100</span></div>
                         </div>
                         <div class="status-item">
-                            <div class="status-info"><span>智力 (Intelligence)</span><span id="intelligence-delta" class="delta-badge"></span></div>
-                            <div class="progress-track"><div class="progress-fill" id="intelligence-fill"></div><span class="progress-text" id="intelligence-val">50/100</span></div>
+                            <div class="status-info"><span>学业预警 (Intelligence)</span><span id="intelligence-delta" class="delta-badge"></span></div>
+                            <div class="progress-track"><div class="progress-fill" id="intelligence-fill" style="background:#f59e0b;"></div><span class="progress-text" id="intelligence-val">50/100</span></div>
                         </div>
                         <div class="status-item">
-                            <div class="status-info"><span>心情 (Mood)</span><span id="mood-delta" class="delta-badge"></span></div>
-                            <div class="progress-track"><div class="progress-fill" id="mood-fill"></div><span class="progress-text" id="mood-val">60/100</span></div>
+                            <div class="status-info"><span>心理风险 (Mood)</span><span id="mood-delta" class="delta-badge"></span></div>
+                            <div class="progress-track"><div class="progress-fill" id="mood-fill" style="background:var(--red-active);"></div><span class="progress-text" id="mood-val">60/100</span></div>
                         </div>
                         <div class="status-item">
-                            <div class="status-info"><span>财力 (Wealth)</span><span id="wealth-delta" class="delta-badge"></span></div>
-                            <div class="progress-track"><div class="progress-fill" id="wealth-fill"></div><span class="progress-text" id="wealth-val">40/100</span></div>
-                        </div>
-                        <div class="status-item">
-                            <div class="status-info"><span>魅力 (Charm)</span><span id="charm-delta" class="delta-badge"></span></div>
-                            <div class="progress-track"><div class="progress-fill" id="charm-fill"></div><span class="progress-text" id="charm-val">50/100</span></div>
+                            <div class="status-info"><span>财务透支 (Wealth)</span><span id="wealth-delta" class="delta-badge"></span></div>
+                            <div class="progress-track"><div class="progress-fill" id="wealth-fill" style="background:#3b82f6;"></div><span class="progress-text" id="wealth-val">40/100</span></div>
                         </div>
                     </div>
                 </div>
@@ -304,82 +249,81 @@
         </div>
 
         <div id="page-archive" class="game-page" style="overflow-y: auto; width: 100%;">
-            <div class="neo-card" style="width: 100%;">
-                <div class="card-header">
-                    <span class="card-subtitle">资产与外挂组件</span>
-                    <span class="card-badge">Assets</span>
-                </div>
-                <div class="archive-grid">
-                    <div class="neo-card-inner">
-                        <h4>🎒 物理装备区</h4>
-                        <p>
-                            • [抗疲劳视网膜镜片] (智力+5)<br>
-                            • [自适应温控外套] (稳重度+10)<br>
-                            • [静音突击板鞋] (敏捷+15)
-                        </p>
+            <div class="panel-card" style="width: 100%; height: 100%;">
+                <p class="card-subtitle">资料收件箱</p>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                    <div class="panel-card" style="box-shadow:none;">
+                        <h4>完成校园卡激活</h4>
+                        <p class="desc-text">入学手续·截止 05/20 18:00</p>
+                        <div style="margin-top:15px; display:flex; gap:8px;">
+                            <span class="status-pill success">完成</span>
+                            <span class="status-pill">编辑</span>
+                            <span class="status-pill">删除</span>
+                        </div>
                     </div>
-                    <div class="neo-card-inner">
-                        <h4>🔗 权限网络</h4>
-                        <p>
-                            • 导师通信链路：50/100 (未激活)<br>
-                            • 门禁系统豁免权：20/100 (低级)<br>
-                            • 餐厅配给优待：75/100 (正常)
-                        </p>
+                    <div class="panel-card" style="box-shadow:none;">
+                        <h4>上传体检确认照片</h4>
+                        <p class="desc-text">材料提交·截止 05/22 12:00</p>
+                        <div style="margin-top:15px; display:flex; gap:8px;">
+                            <span class="status-pill">待确认</span>
+                            <span class="status-pill">进行中</span>
+                            <span class="status-pill">编辑</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="page-map" class="game-page" style="overflow-y: auto; width: 100%;">
-            <div class="neo-card" style="width: 100%;">
-                <div class="card-header">
-                    <span class="card-subtitle">可执行地点扫描</span>
-                    <span class="card-badge">Scan</span>
-                </div>
-                <div class="map-list">
-                    <div class="map-item" onclick="alert('进入核心数据区。算力分配完毕。')">
-                        <h3>📍 [ZONE 1] 矩阵图书馆</h3>
-                        <p>高强度算力消耗区。概率提升【智力】，警告：可能导致【心情】极速下降。</p>
+            <div class="panel-card" style="width: 100%; height: 100%;">
+                <p class="card-subtitle">任务池</p>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="panel-card" style="cursor: pointer; transition: 0.1s;" onmousedown="this.style.transform='translate(2px,2px)'; this.style.boxShadow='none'" onmouseup="this.style.transform='none'; this.style.boxShadow='4px 4px 0px rgba(30,41,59,0.05)'">
+                        <div style="display:flex; justify-content:space-between;">
+                            <h3>[高风险] 矩阵图书馆</h3>
+                            <span class="status-pill" style="color:var(--red-active); border-color:var(--red-active);">Risk Scan</span>
+                        </div>
+                        <p class="desc-text">高强度算力消耗区。概率提升智力，可能导致心情下降。</p>
                     </div>
-                    <div class="map-item" onclick="alert('生命维持系统已启动。')">
-                        <h3>📍 [ZONE 2] 个人休眠舱</h3>
-                        <p>安全回血区域。迅速补满【体力】，警告：驻留过久将触发外卖消耗（扣除财力）。</p>
-                    </div>
-                    <div class="map-item" onclick="alert('进入高频商业街，资金已划扣。')">
-                        <h3>📍 [ZONE 3] 第三物资街区</h3>
-                        <p>高危消费带。大幅提升【心情】与【魅力】，系统将强制扣除对应【财力】。</p>
+                    <div class="panel-card" style="cursor: pointer; transition: 0.1s;" onmousedown="this.style.transform='translate(2px,2px)'; this.style.boxShadow='none'" onmouseup="this.style.transform='none'; this.style.boxShadow='4px 4px 0px rgba(30,41,59,0.05)'">
+                        <div style="display:flex; justify-content:space-between;">
+                            <h3>[安全] 个人休眠舱</h3>
+                            <span class="status-pill success">Safe Area</span>
+                        </div>
+                        <p class="desc-text">安全回血区域。迅速补满体力，驻留过久将触发外卖物资消耗。</p>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 
     <dialog class="glass-dialog" id="npc-dialog">
-        <div class="dialog-title">系统警告 (Warning)</div>
-        <p id="npc-message" style="line-height: 1.6; color: var(--ganyu); font-size: 14px; font-weight: 500;"></p>
-        <button class="dialog-btn" style="float: right;" onclick="document.getElementById('npc-dialog').close()">确认</button>
+        <div class="dialog-title">系统强制提醒 (Nudge)</div>
+        <p id="npc-message" style="line-height: 1.6; color: #1e293b; font-size: 15px; font-weight: 600;"></p>
+        <div style="display: flex; justify-content: flex-end;">
+            <button class="dialog-btn" onclick="document.getElementById('npc-dialog').close()">已知晓风险</button>
+        </div>
     </dialog>
 
-    <dialog class="glass-dialog" id="crop-dialog" style="width: 500px;">
-        <div class="dialog-title">特征校准</div>
+    <dialog class="glass-dialog" id="crop-dialog" style="width: 550px;">
+        <div class="dialog-title">影像载入</div>
         <div class="img-container">
             <img id="image-to-crop" src="">
         </div>
-        <div style="display: flex; justify-content: flex-end; gap: 12px;">
-            <button class="dialog-btn" style="background: var(--bg-light); color: var(--ganyu); box-shadow: none;" onclick="closeCropDialog()">放弃</button>
-            <button class="dialog-btn" onclick="confirmCrop()">覆盖</button>
+        <div style="display: flex; justify-content: flex-end; gap: 15px;">
+            <button class="dialog-btn" style="background: #fff; color: var(--border-color);" onclick="closeCropDialog()">取消操作</button>
+            <button class="dialog-btn" onclick="confirmCrop()">裁剪确认</button>
         </div>
     </dialog>
 
     <script>
-        // 核心 JS 逻辑与之前完全保持一致，未做删减
         let userStats = { stamina: 70, intelligence: 50, mood: 60, wealth: 40, charm: 50 };
         
         const campusEvents = [
-            "【广播】气象系统显示今日晴朗，偶遇概率上升。",
-            "【通知】后勤补给站物资充足，限制已解除。",
-            "【警报】检测到教三楼存在持续算力溢出... (内卷行为)",
-            "【提示】节点评估周期将近，建议分配算力复习。",
+            "> [拦截记录] 成功拦截一项未规划的高额娱乐消费请求。",
+            "> [预警机制] 系统检测到您的期末 DDl 临近，建议立即切换至专注模式。",
+            "> [常规扫描] 您的身份认证已过期，请在资料收件箱补充信息。",
         ];
 
         let typeWriterTimeout;
@@ -428,63 +372,58 @@
         async function submitDiary() {
             const input = document.getElementById('daily-input').value;
             if(!input) { alert("指令为空。请输入操作日志。"); return; }
-            const btn = document.getElementById('submit-btn'); btn.innerText = "演算中..."; btn.disabled = true;
+            const btn = document.getElementById('submit-btn'); btn.innerText = "数据载入中..."; btn.disabled = true;
 
-            typeWriter("> 开始特征值演算...");
+            typeWriter("> 开始扫描风险因子...");
 
             try {
-                const response = await fetch('https://xiaomo-persona.onrender.com/api/settle', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({text: input})
-                });
-                const data = await response.json();
+                await new Promise(resolve => setTimeout(resolve, 800));
+                
+                let data = { stamina_delta: 0, intelligence_delta: 0, mood_delta: 0, summary: "行动记录已载入风险池。" };
+                if(input.includes("学习") || input.includes("看书") || input.includes("图书馆")) { data.intelligence_delta = 5; data.stamina_delta = -5; data.mood_delta = -2; data.summary = "侦测到学业行为，智力评估上调。"; }
+                if(input.includes("睡觉") || input.includes("休息")) { data.stamina_delta = 10; data.mood_delta = 5; data.summary = "体能恢复，风险解除。"; }
                 
                 let w_delta = 0, c_delta = 0;
-                if(input.includes("买") || input.includes("外卖") || input.includes("钱") || input.includes("游戏")) { w_delta = -Math.floor(Math.random() * 10 + 5); } 
-                else if(input.includes("兼职") || input.includes("赚钱")) { w_delta = Math.floor(Math.random() * 15 + 10); }
-
-                if(input.includes("洗头") || input.includes("社团") || input.includes("聊天") || input.includes("表白")) { c_delta = Math.floor(Math.random() * 10 + 5); } 
-                else if(input.includes("没洗头") || input.includes("熬夜") || input.includes("旷课")) { c_delta = -Math.floor(Math.random() * 8 + 2); }
+                if(input.includes("买") || input.includes("外卖") || input.includes("游戏")) { w_delta = -5; data.mood_delta += 5; } 
+                else if(input.includes("兼职")) { w_delta = 10; data.stamina_delta -= 10; }
 
                 updateStat('stamina', data.stamina_delta); updateStat('intelligence', data.intelligence_delta); updateStat('mood', data.mood_delta);
-                updateStat('wealth', w_delta); updateStat('charm', c_delta);
+                updateStat('wealth', w_delta);
 
-                typeWriter("> " + data.summary);
+                typeWriter("> [Scan Complete] " + data.summary);
                 
-                addHistoryLog(input, data.stamina_delta, data.intelligence_delta, data.mood_delta, w_delta, c_delta);
-                document.getElementById('daily-input').value = ''; checkTitleEvolution();
+                addHistoryLog(input, data.stamina_delta, data.intelligence_delta, data.mood_delta, w_delta);
+                document.getElementById('daily-input').value = ''; 
 
                 if (userStats.mood < 30) {
-                    setTimeout(() => { document.getElementById('npc-message').innerText = "情绪阈值极低。建议立刻执行娱乐恢复程序！"; document.getElementById('npc-dialog').showModal(); }, 1500);
+                    setTimeout(() => { document.getElementById('npc-message').innerText = "⚠️ 检测到情绪阈值降至危险区间！建议立刻停止高压活动，执行娱乐或休息程序。"; document.getElementById('npc-dialog').showModal(); }, 1200);
                 } else if (userStats.wealth < 10) {
-                    setTimeout(() => { document.getElementById('npc-message').innerText = "资金链已近枯竭。请立刻停止非必要支出行为！"; document.getElementById('npc-dialog').showModal(); }, 1500);
+                    setTimeout(() => { document.getElementById('npc-message').innerText = "⚠️ 财务透支预警！已限制非必要消费选项，请注意资金流向。"; document.getElementById('npc-dialog').showModal(); }, 1200);
                 }
-            } catch (error) {
-                console.error(error); 
-                typeWriter("> Fatal Error: 无法连接中枢");
-                alert("网络协议阻断。");
-            } finally { btn.innerText = "提交演算"; btn.disabled = false; }
+            } finally { btn.innerText = "开启演算权限"; btn.disabled = false; }
         }
 
-        function addHistoryLog(text, st, int, mo, we, ch) {
+        function addHistoryLog(text, st, int, mo, we) {
             const hint = document.getElementById('empty-hint'); if (hint) hint.style.display = 'none';
             const container = document.getElementById('history-log-container');
-            const now = new Date(); const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-            const formatDelta = (val, label) => { if (val > 0) return `<span class="pos">${label} +${val}</span>`; if (val < 0) return `<span class="neg">${label} ${val}</span>`; return `<span style="color:#8fa6b8;">${label} 0</span>`; };
-            const logHtml = `<div class="log-item"><div class="log-time">> ${timeStr}</div><div class="log-text">${text}</div><div class="log-stats">${formatDelta(st, 'STM')} ${formatDelta(int, 'INT')} ${formatDelta(mo, 'MOD')} ${formatDelta(we, 'WLT')} ${formatDelta(ch, 'CHM')}</div></div>`;
+            const now = new Date(); const timeStr = `${now.getMonth()+1}/${now.getDate()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+            const formatDelta = (val, label) => { if (val > 0) return `<span class="pos">${label} +${val}</span>`; if (val < 0) return `<span class="neg">${label} ${val}</span>`; return `<span style="color:#94a3b8;">${label} 0</span>`; };
+            const logHtml = `<div class="log-item"><div class="log-time">${timeStr}</div><div class="log-text">${text}</div><div style="display:flex; gap:5px; margin-top:8px;"><span class="status-pill">已评估</span><span class="status-pill" style="border-style:dashed;">等待归档</span></div></div>`;
             container.insertAdjacentHTML('afterbegin', logHtml);
         }
 
         function updateStat(key, delta) {
             userStats[key] += delta; userStats[key] = Math.max(0, Math.min(100, userStats[key]));
             let deltaSpan = document.getElementById(key + '-delta');
+            if(!deltaSpan) return;
             if (delta > 0) { deltaSpan.innerText = "+" + delta; deltaSpan.className = "delta-badge pos"; } 
             else if (delta < 0) { deltaSpan.innerText = delta; deltaSpan.className = "delta-badge neg"; } 
-            else { deltaSpan.innerText = "0"; deltaSpan.className = "delta-badge"; }
+            else { deltaSpan.innerText = ""; deltaSpan.className = "delta-badge"; }
             renderBars();
         }
 
         function renderBars() {
-            const keys = ['stamina', 'intelligence', 'mood', 'wealth', 'charm'];
+            const keys = ['stamina', 'intelligence', 'mood', 'wealth'];
             keys.forEach(key => { 
                 const fillEl = document.getElementById(key + '-fill');
                 const valEl = document.getElementById(key + '-val');
@@ -493,17 +432,10 @@
             });
         }
 
-        function checkTitleEvolution() {
-            let titleBox = document.getElementById('player-title');
-            if (!titleBox) return;
-            if (userStats.intelligence >= 80) { titleBox.innerText = "当前权限：LV.MAX"; } 
-            else if (userStats.stamina <= 20) { titleBox.innerText = "状态异常：过载"; }
-        }
-
         function changeName() {
-            let newName = prompt("请输入系统标识名：", "小阳");
+            let newName = prompt("请输入您的学生标识号：", "用户 6023");
             if (newName !== null && newName.trim() !== "") {
-                document.getElementById('display-name').innerText = "操作员：" + newName.trim() + " ✎";
+                document.getElementById('display-name').innerText = newName.trim();
             }
         }
 
