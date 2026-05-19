@@ -54,17 +54,14 @@
         .avatar-wrapper:hover .avatar-hover-overlay { opacity: 1; }
         .avatar-wrapper:hover .avatar { transform: scale(1.1); }
         .profile-info { display: flex; flex-direction: column; gap: 6px; }
-        
-        /* 修改点：给名字加上了发光悬停特效和手型指针 */
         .player-name { font-size: 18px; font-weight: bold; color: #fff; display: inline-block; transition: 0.3s; cursor: pointer; }
         .player-name:hover { color: #ff6ebb; text-shadow: 0 0 8px rgba(255,110,187,0.8); transform: scale(1.05); }
-        
         .title-badge { background: linear-gradient(90deg, #ff6ebb, #a29bfe); padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; color: white; display: inline-block; width: fit-content; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
 
         /* ==================== 6. 高阶状态条与数值 ==================== */
-        .status-item { margin-bottom: 18px; }
+        .status-item { margin-bottom: 15px; }
         .status-info { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; align-items: center; }
-        .progress-track { width: 100%; height: 16px; background: rgba(255, 255, 255, 0.15); border-radius: 8px; overflow: hidden; position: relative; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
+        .progress-track { width: 100%; height: 14px; background: rgba(255, 255, 255, 0.15); border-radius: 8px; overflow: hidden; position: relative; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
         .progress-fill { height: 100%; width: 50%; border-radius: 8px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); position: relative; z-index: 1; }
         .progress-text { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 11px; font-weight: bold; color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.8); z-index: 2; letter-spacing: 1px;}
         #stamina-fill { background: linear-gradient(90deg, #10b981, #34d399); }
@@ -75,7 +72,25 @@
         .delta-badge { font-weight: bold; font-size: 13px; }
         .pos { color: #34d399; }
         .neg { color: #f87171; }
-        .summary-content { font-size: 14px; line-height: 1.6; color: #e2e8f0; font-style: italic; }
+
+        /* ==================== 🌟 新增：赛博终端机专属样式 ==================== */
+        .terminal-box {
+            background: rgba(10, 15, 25, 0.85) !important; /* 更深的背景色，模拟控制台 */
+            border: 1px solid rgba(57, 255, 20, 0.3) !important;
+            border-left: 4px solid #39ff14 !important; /* 荧光绿侧边 */
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.1) !important;
+            display: flex; flex-direction: column;
+        }
+        .terminal-title { color: #39ff14 !important; border-left: none !important; padding-left: 0 !important; font-family: "Courier New", Courier, monospace; }
+        .terminal-content { 
+            font-size: 14px; line-height: 1.6; 
+            color: #39ff14; /* 荧光绿文字 */
+            font-family: "Consolas", "Courier New", Courier, monospace; /* 程序员代码字体 */
+            text-shadow: 0 0 5px rgba(57, 255, 20, 0.5);
+            flex: 1;
+        }
+        .cursor-blink { animation: blink 1s step-end infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
 
         /* ==================== 7. 弹窗样式 ==================== */
         .glass-dialog { border: none; background: rgba(25, 20, 30, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(248, 113, 113, 0.4); border-radius: 20px; padding: 30px; width: 450px; color: white; box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(248, 113, 113, 0.15); margin: auto; }
@@ -124,7 +139,7 @@
                         </div>
                     </div>
 
-                    <p class="card-subtitle">[状态] 核心数值面板</p>
+                    <p class="card-subtitle">[状态] 核心数值</p>
                     <div class="status-item"><div class="status-info"><span>体力 (Stamina)</span><span id="stamina-delta" class="delta-badge"></span></div><div class="progress-track"><div class="progress-fill" id="stamina-fill"></div><span class="progress-text" id="stamina-val">70/100</span></div></div>
                     <div class="status-item"><div class="status-info"><span>智力 (Intelligence)</span><span id="intelligence-delta" class="delta-badge"></span></div><div class="progress-track"><div class="progress-fill" id="intelligence-fill"></div><span class="progress-text" id="intelligence-val">50/100</span></div></div>
                     <div class="status-item"><div class="status-info"><span>心情 (Mood)</span><span id="mood-delta" class="delta-badge"></span></div><div class="progress-track"><div class="progress-fill" id="mood-fill"></div><span class="progress-text" id="mood-val">60/100</span></div></div>
@@ -132,9 +147,9 @@
                     <div class="status-item"><div class="status-info"><span>魅力 (Charm)</span><span id="charm-delta" class="delta-badge"></span></div><div class="progress-track"><div class="progress-fill" id="charm-fill"></div><span class="progress-text" id="charm-val">50/100</span></div></div>
                 </div>
 
-                <div class="glass-card" id="summary-box" style="flex: 1; display: none;">
-                    <p class="card-subtitle">观测者旁白</p>
-                    <p class="summary-content" id="summary-text"></p>
+                <div class="glass-card terminal-box" id="summary-box" style="flex: 1;">
+                    <p class="card-subtitle terminal-title">📡 校园频道接收器</p>
+                    <p class="terminal-content"><span id="summary-text">正在搜索校园信号...</span><span class="cursor-blink">█</span></p>
                 </div>
             </div>
         </div>
@@ -159,12 +174,49 @@
 
     <script>
         let userStats = { stamina: 70, intelligence: 50, mood: 60, wealth: 40, charm: 50 };
-        window.onload = () => { renderBars(); };
+        
+        // ==================== 🌟 新增：校园彩蛋与打字机特效 ====================
+        const campusEvents = [
+            "【校园快讯】今日天气晴朗，操场偶遇率上升 15%，建议梳洗一番再出门。",
+            "【食堂情报】二食堂阿姨今日心情极佳，打肉手抖概率降至全学期最低！",
+            "【神秘传闻】半夜的教三楼传出诡异的翻书声……（经查实为某内卷狂人）",
+            "【系统提示】距离期末考试还有一段日子，系统建议你放下手机去自习。",
+            "【表白墙播报】《震惊！某同学竟然在图书馆吃韭菜盒子...》",
+            "【失物招领】饭卡在三食堂掉落的同学，你的卡已经被刷爆啦！"
+        ];
 
+        let typeWriterTimeout;
+        function typeWriter(text) {
+            const textEl = document.getElementById('summary-text');
+            textEl.innerText = "";
+            let i = 0;
+            clearTimeout(typeWriterTimeout); // 清除上一次未打完的字
+            
+            function type() {
+                if (i < text.length) {
+                    textEl.innerText += text.charAt(i);
+                    i++;
+                    typeWriterTimeout = setTimeout(type, 40); // 40毫秒打字速度，极度舒适
+                }
+            }
+            type();
+        }
+
+        window.onload = () => { 
+            renderBars(); 
+            // 每次刷新，终端机随机广播一条校园彩蛋
+            const randomMsg = campusEvents[Math.floor(Math.random() * campusEvents.length)];
+            setTimeout(() => typeWriter(randomMsg), 500); // 稍微延迟一下更有加载感
+        };
+
+        // ==================== 核心逻辑 ====================
         async function submitDiary() {
             const input = document.getElementById('daily-input').value;
             if(!input) { alert("同学，你今天总不能什么都没干吧？写点什么！"); return; }
             const btn = document.getElementById('submit-btn'); btn.innerText = "大模型沉思中..."; btn.disabled = true;
+
+            // 结算前，终端机显示思考状态
+            typeWriter("【系统正在连接云端 AI 进行结算分析，请稍后...】");
 
             try {
                 const response = await fetch('https://xiaomo-persona.onrender.com/api/settle', {
@@ -182,17 +234,21 @@
                 updateStat('stamina', data.stamina_delta); updateStat('intelligence', data.intelligence_delta); updateStat('mood', data.mood_delta);
                 updateStat('wealth', w_delta); updateStat('charm', c_delta);
 
-                document.getElementById('summary-box').style.display = 'block'; document.getElementById('summary-text').innerText = "“ " + data.summary + " ”";
+                // 🌟 修改点：收到结果后，用打字机特效把 AI 总结打在终端机上
+                typeWriter("【AI 分析完毕】 " + data.summary);
+                
                 addHistoryLog(input, data.stamina_delta, data.intelligence_delta, data.mood_delta, w_delta, c_delta);
                 document.getElementById('daily-input').value = ''; checkTitleEvolution();
 
                 if (userStats.mood < 30) {
-                    setTimeout(() => { document.getElementById('npc-message').innerText = "辅导员小阳：你看看你的心情值！检测到持续摆烂或内卷，请立刻放下手机去吃顿好的，否则明天将被挂科诅咒！"; document.getElementById('npc-dialog').showModal(); }, 600);
+                    setTimeout(() => { document.getElementById('npc-message').innerText = "辅导员小阳：你看看你的心情值！检测到持续摆烂或内卷，请立刻放下手机去吃顿好的，否则明天将被挂科诅咒！"; document.getElementById('npc-dialog').showModal(); }, 1500);
                 } else if (userStats.wealth < 10) {
-                    setTimeout(() => { document.getElementById('npc-message').innerText = "老妈来电：你生活费怎么见底了？！天天买外卖是吧？下个月扣钱！"; document.getElementById('npc-dialog').showModal(); }, 600);
+                    setTimeout(() => { document.getElementById('npc-message').innerText = "老妈来电：你生活费怎么见底了？！天天买外卖是吧？下个月扣钱！"; document.getElementById('npc-dialog').showModal(); }, 1500);
                 }
             } catch (error) {
-                console.error(error); alert("请求失败！请检查 Render 云端服务器状态。");
+                console.error(error); 
+                typeWriter("【致命错误】请求失败！未能连接到 Render 云端大脑...");
+                alert("请求失败！请检查 Render 云端服务器状态。");
             } finally { btn.innerText = "AI 结算属性"; btn.disabled = false; }
         }
 
@@ -226,6 +282,13 @@
             else if (userStats.stamina <= 20) { titleBox.innerText = "LV.10 脆皮大学生"; titleBox.style.background = "linear-gradient(90deg, #94a3b8, #475569)"; }
         }
 
+        function changeName() {
+            let newName = prompt("请输入你的新专属昵称：", "小阳");
+            if (newName !== null && newName.trim() !== "") {
+                document.getElementById('display-name').innerText = "玩家：" + newName.trim() + " ✏️";
+            }
+        }
+
         // ==================== 头像上传与裁剪逻辑 ====================
         let cropper;
         const uploadInput = document.getElementById('avatar-upload');
@@ -241,13 +304,7 @@
                     imageToCrop.src = event.target.result;
                     cropDialog.showModal();
                     if (cropper) cropper.destroy();
-                    cropper = new Cropper(imageToCrop, {
-                        aspectRatio: 1,
-                        viewMode: 1,
-                        dragMode: 'move',
-                        guides: true,
-                        background: false
-                    });
+                    cropper = new Cropper(imageToCrop, { aspectRatio: 1, viewMode: 1, dragMode: 'move', guides: true, background: false });
                 };
                 reader.readAsDataURL(files[0]);
             }
@@ -260,15 +317,6 @@
             const canvas = cropper.getCroppedCanvas({ width: 200, height: 200 });
             playerAvatar.src = canvas.toDataURL('image/png');
             closeCropDialog();
-        }
-
-        // ==================== 新增：修改用户名称逻辑 ====================
-        function changeName() {
-            let newName = prompt("请输入你的新专属昵称：", "小阳");
-            // 判断用户是否输入了内容，并且没有点取消
-            if (newName !== null && newName.trim() !== "") {
-                document.getElementById('display-name').innerText = "玩家：" + newName.trim() + " ✏️";
-            }
         }
     </script>
 </body>
