@@ -46,7 +46,7 @@
         .empty-hint { text-align: center; color: #cbd5e1; font-style: italic; margin-top: 30px; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ==================== 5. RPG 角色信息区 & 头像上传 ==================== */
+        /* ==================== 5. RPG 角色信息区 ==================== */
         .profile-header { display: flex; align-items: center; gap: 18px; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px dashed rgba(255,255,255,0.2); }
         .avatar-wrapper { position: relative; width: 65px; height: 65px; border-radius: 50%; cursor: pointer; overflow: hidden; border: 3px solid #ff6ebb; box-shadow: 0 0 15px rgba(255, 110, 187, 0.5); }
         .avatar { width: 100%; height: 100%; object-fit: cover; background: rgba(255,255,255,0.2); transition: 0.3s; }
@@ -73,26 +73,26 @@
         .pos { color: #34d399; }
         .neg { color: #f87171; }
 
-        /* ==================== 🌟 新增：赛博终端机专属样式 ==================== */
+        /* ==================== 🌟 重新设计的：二次元全息终端风格 ==================== */
         .terminal-box {
-            background: rgba(10, 15, 25, 0.85) !important; /* 更深的背景色，模拟控制台 */
-            border: 1px solid rgba(57, 255, 20, 0.3) !important;
-            border-left: 4px solid #39ff14 !important; /* 荧光绿侧边 */
-            box-shadow: 0 0 15px rgba(57, 255, 20, 0.1) !important;
+            /* 替换掉了突兀的黑绿色，改成了融合度极高的半透明幻彩背景 */
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 110, 187, 0.05)) !important; 
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-left: 4px solid #a29bfe !important; /* 优雅的淡紫色侧边 */
+            box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.05) !important;
             display: flex; flex-direction: column;
         }
-        .terminal-title { color: #39ff14 !important; border-left: none !important; padding-left: 0 !important; font-family: "Courier New", Courier, monospace; }
+        .terminal-title { color: #fff !important; border-left: none !important; padding-left: 0 !important; }
         .terminal-content { 
             font-size: 14px; line-height: 1.6; 
-            color: #39ff14; /* 荧光绿文字 */
-            font-family: "Consolas", "Courier New", Courier, monospace; /* 程序员代码字体 */
-            text-shadow: 0 0 5px rgba(57, 255, 20, 0.5);
+            color: #f8fafc; /* 柔和的白色文字 */
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
             flex: 1;
         }
-        .cursor-blink { animation: blink 1s step-end infinite; }
+        .cursor-blink { color: #ff6ebb; animation: blink 1s step-end infinite; } /* 粉色闪烁光标 */
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* ==================== 7. 弹窗样式 ==================== */
+        /* ==================== 7. 弹窗通用样式 ==================== */
         .glass-dialog { border: none; background: rgba(25, 20, 30, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(248, 113, 113, 0.4); border-radius: 20px; padding: 30px; width: 450px; color: white; box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(248, 113, 113, 0.15); margin: auto; }
         .glass-dialog::backdrop { background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); }
         .dialog-title { color: #f87171; font-size: 20px; font-weight: bold; margin-bottom: 15px; }
@@ -106,6 +106,7 @@
     <div class="main-board">
         <h1 class="board-title">[-] 大学生生涯状态模拟舱 [-]</h1>
         <div class="content-layout">
+            
             <div class="column-left">
                 <div class="glass-card" style="flex: 0 0 auto;">
                     <p class="card-subtitle">[日志] 今日行动日志</p>
@@ -121,6 +122,11 @@
                     <div id="history-log-container" class="history-container">
                         <div class="empty-hint" id="empty-hint">暂无行动记录，快去开启今天的生活吧！</div>
                     </div>
+                </div>
+
+                <div class="glass-card terminal-box" id="summary-box" style="flex: 0 0 auto; min-height: 120px;">
+                    <p class="card-subtitle terminal-title">📡 校园频道接收器</p>
+                    <p class="terminal-content"><span id="summary-text">正在搜索校园信号...</span><span class="cursor-blink">█</span></p>
                 </div>
             </div>
 
@@ -139,17 +145,12 @@
                         </div>
                     </div>
 
-                    <p class="card-subtitle">[状态] 核心数值</p>
+                    <p class="card-subtitle">[状态] 核心数值面板</p>
                     <div class="status-item"><div class="status-info"><span>体力 (Stamina)</span><span id="stamina-delta" class="delta-badge"></span></div><div class="progress-track"><div class="progress-fill" id="stamina-fill"></div><span class="progress-text" id="stamina-val">70/100</span></div></div>
                     <div class="status-item"><div class="status-info"><span>智力 (Intelligence)</span><span id="intelligence-delta" class="delta-badge"></span></div><div class="progress-track"><div class="progress-fill" id="intelligence-fill"></div><span class="progress-text" id="intelligence-val">50/100</span></div></div>
                     <div class="status-item"><div class="status-info"><span>心情 (Mood)</span><span id="mood-delta" class="delta-badge"></span></div><div class="progress-track"><div class="progress-fill" id="mood-fill"></div><span class="progress-text" id="mood-val">60/100</span></div></div>
                     <div class="status-item"><div class="status-info"><span>财力 (Wealth)</span><span id="wealth-delta" class="delta-badge"></span></div><div class="progress-track"><div class="progress-fill" id="wealth-fill"></div><span class="progress-text" id="wealth-val">40/100</span></div></div>
                     <div class="status-item"><div class="status-info"><span>魅力 (Charm)</span><span id="charm-delta" class="delta-badge"></span></div><div class="progress-track"><div class="progress-fill" id="charm-fill"></div><span class="progress-text" id="charm-val">50/100</span></div></div>
-                </div>
-
-                <div class="glass-card terminal-box" id="summary-box" style="flex: 1;">
-                    <p class="card-subtitle terminal-title">📡 校园频道接收器</p>
-                    <p class="terminal-content"><span id="summary-text">正在搜索校园信号...</span><span class="cursor-blink">█</span></p>
                 </div>
             </div>
         </div>
@@ -175,7 +176,6 @@
     <script>
         let userStats = { stamina: 70, intelligence: 50, mood: 60, wealth: 40, charm: 50 };
         
-        // ==================== 🌟 新增：校园彩蛋与打字机特效 ====================
         const campusEvents = [
             "【校园快讯】今日天气晴朗，操场偶遇率上升 15%，建议梳洗一番再出门。",
             "【食堂情报】二食堂阿姨今日心情极佳，打肉手抖概率降至全学期最低！",
@@ -190,13 +190,13 @@
             const textEl = document.getElementById('summary-text');
             textEl.innerText = "";
             let i = 0;
-            clearTimeout(typeWriterTimeout); // 清除上一次未打完的字
+            clearTimeout(typeWriterTimeout); 
             
             function type() {
                 if (i < text.length) {
                     textEl.innerText += text.charAt(i);
                     i++;
-                    typeWriterTimeout = setTimeout(type, 40); // 40毫秒打字速度，极度舒适
+                    typeWriterTimeout = setTimeout(type, 40);
                 }
             }
             type();
@@ -204,18 +204,15 @@
 
         window.onload = () => { 
             renderBars(); 
-            // 每次刷新，终端机随机广播一条校园彩蛋
             const randomMsg = campusEvents[Math.floor(Math.random() * campusEvents.length)];
-            setTimeout(() => typeWriter(randomMsg), 500); // 稍微延迟一下更有加载感
+            setTimeout(() => typeWriter(randomMsg), 500); 
         };
 
-        // ==================== 核心逻辑 ====================
         async function submitDiary() {
             const input = document.getElementById('daily-input').value;
             if(!input) { alert("同学，你今天总不能什么都没干吧？写点什么！"); return; }
             const btn = document.getElementById('submit-btn'); btn.innerText = "大模型沉思中..."; btn.disabled = true;
 
-            // 结算前，终端机显示思考状态
             typeWriter("【系统正在连接云端 AI 进行结算分析，请稍后...】");
 
             try {
@@ -234,7 +231,6 @@
                 updateStat('stamina', data.stamina_delta); updateStat('intelligence', data.intelligence_delta); updateStat('mood', data.mood_delta);
                 updateStat('wealth', w_delta); updateStat('charm', c_delta);
 
-                // 🌟 修改点：收到结果后，用打字机特效把 AI 总结打在终端机上
                 typeWriter("【AI 分析完毕】 " + data.summary);
                 
                 addHistoryLog(input, data.stamina_delta, data.intelligence_delta, data.mood_delta, w_delta, c_delta);
@@ -289,7 +285,6 @@
             }
         }
 
-        // ==================== 头像上传与裁剪逻辑 ====================
         let cropper;
         const uploadInput = document.getElementById('avatar-upload');
         const cropDialog = document.getElementById('crop-dialog');
