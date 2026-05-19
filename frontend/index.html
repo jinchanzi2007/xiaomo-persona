@@ -54,7 +54,11 @@
         .avatar-wrapper:hover .avatar-hover-overlay { opacity: 1; }
         .avatar-wrapper:hover .avatar { transform: scale(1.1); }
         .profile-info { display: flex; flex-direction: column; gap: 6px; }
-        .player-name { font-size: 18px; font-weight: bold; color: #fff; }
+        
+        /* 修改点：给名字加上了发光悬停特效和手型指针 */
+        .player-name { font-size: 18px; font-weight: bold; color: #fff; display: inline-block; transition: 0.3s; cursor: pointer; }
+        .player-name:hover { color: #ff6ebb; text-shadow: 0 0 8px rgba(255,110,187,0.8); transform: scale(1.05); }
+        
         .title-badge { background: linear-gradient(90deg, #ff6ebb, #a29bfe); padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; color: white; display: inline-block; width: fit-content; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
 
         /* ==================== 6. 高阶状态条与数值 ==================== */
@@ -115,7 +119,7 @@
                         <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
                         
                         <div class="profile-info">
-                            <div class="player-name">玩家：小阳</div>
+                            <div class="player-name" id="display-name" onclick="changeName()" title="点击修改昵称">玩家：小阳 ✏️</div>
                             <div class="title-badge" id="player-title">LV.1 迷茫大一新生</div>
                         </div>
                     </div>
@@ -256,6 +260,15 @@
             const canvas = cropper.getCroppedCanvas({ width: 200, height: 200 });
             playerAvatar.src = canvas.toDataURL('image/png');
             closeCropDialog();
+        }
+
+        // ==================== 新增：修改用户名称逻辑 ====================
+        function changeName() {
+            let newName = prompt("请输入你的新专属昵称：", "小阳");
+            // 判断用户是否输入了内容，并且没有点取消
+            if (newName !== null && newName.trim() !== "") {
+                document.getElementById('display-name').innerText = "玩家：" + newName.trim() + " ✏️";
+            }
         }
     </script>
 </body>
